@@ -59,10 +59,19 @@ class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
         $collegeName = isset($row['college_name']) ? trim($row['college_name']) : '';
         $normName = $this->normalizeCollegeName($collegeName);
 
+        $type = isset($row['type']) ? trim($row['type']) : '';
+        if (empty($type)) {
+            if (stripos($collegeName, 'Autonomous') !== false) {
+                $type = 'Autonomous';
+            } else {
+                $type = 'Affiliated';
+            }
+        }
+
         if (array_key_exists($normName, $this->collegesNormalizedMap)) {
             $existingCollege = $this->collegesNormalizedMap[$normName];
             $existingCollege->update([
-                'type' => isset($row['type']) ? trim($row['type']) : $existingCollege->type,
+                'type' => $type,
                 'university_id' => $universityId ?? $existingCollege->university_id,
             ]);
             $this->updatedCount++;
@@ -71,7 +80,7 @@ class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
 
         $college = College::create([
             'name'             => $collegeName,
-            'type'             => isset($row['type']) ? trim($row['type']) : null,
+            'type'             => $type,
             'university_id'    => $universityId,
             'status'           => 'active',
         ]);
