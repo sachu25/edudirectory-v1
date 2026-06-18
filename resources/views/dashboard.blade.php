@@ -108,7 +108,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Added This Month</h6>
+                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Colleges Added This Month</h6>
                             <h3 class="mb-0 fw-bold text-dark">{{ $addedThisMonth }}</h3>
                         </div>
                         <div class="p-3 rounded-circle" style="background: rgba(139, 92, 246, 0.1); color: #8B5CF6;">
