@@ -71,7 +71,7 @@ class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
         if (array_key_exists($normName, $this->collegesNormalizedMap)) {
             $existingCollege = $this->collegesNormalizedMap[$normName];
             $existingCollege->update([
-                'type' => $type,
+                'type' => $existingCollege->type ?: $type,
                 'university_id' => $universityId ?? $existingCollege->university_id,
             ]);
             $this->updatedCount++;
