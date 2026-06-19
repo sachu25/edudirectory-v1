@@ -35,7 +35,7 @@
                 <td>{{ $college->university ? $college->university->name : 'N/A' }}</td>
                 <td>{{ $college->type }}</td>
                 <td>{{ $college->state ?? '-' }}</td>
-                <td>{{ $college->university ? ucfirst($college->university->status) : 'N/A' }}</td>
+                <td>{{ ucfirst($college->status) }}</td>
             </tr>
             @endforeach
         </tbody>

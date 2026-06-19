@@ -23,9 +23,7 @@ class ReportController extends Controller
             $query->where('type', $request->type);
         }
         if ($request->filled('status')) {
-            $query->whereHas('university', function($q) use ($request) {
-                $q->where('status', $request->status);
-            });
+            $query->where('status', $request->status);
         }
 
         $colleges = $query->paginate(20)->withQueryString();
@@ -54,9 +52,7 @@ class ReportController extends Controller
             $query->where('type', $request->type);
         }
         if ($request->filled('status')) {
-            $query->whereHas('university', function($q) use ($request) {
-                $q->where('status', $request->status);
-            });
+            $query->where('status', $request->status);
         }
 
         $colleges = $query->get();

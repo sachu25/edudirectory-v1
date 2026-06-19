@@ -28,9 +28,7 @@ class CollegeExport implements FromCollection, WithHeadings, WithMapping
             $query->where('type', $this->request->type);
         }
         if ($this->request->filled('status')) {
-            $query->whereHas('university', function($q) {
-                $q->where('status', $this->request->status);
-            });
+            $query->where('status', $this->request->status);
         }
 
         return $query->get();
@@ -79,7 +77,7 @@ class CollegeExport implements FromCollection, WithHeadings, WithMapping
             $college->faculty_strength,
             $college->district,
             $college->state,
-            $college->university ? ucfirst($college->university->status) : 'N/A',
+            ucfirst($college->status),
             $college->created_at->format('Y-m-d')
         ];
     }

@@ -238,6 +238,14 @@
                                 <input type="text" class="form-control" id="courses_offered" name="courses_offered" placeholder="e.g. B.Tech, M.Tech, MBA">
                             </div>
 
+                            <div class="col-md-6">
+                                <label for="status" class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
+                                <select class="form-select" id="status" name="status" required>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+
                             <div class="col-md-12">
                                 <div class="form-check form-check-inline mt-2">
                                     <input class="form-check-input" type="checkbox" id="hostel_facility" name="hostel_facility" value="1">
@@ -345,6 +353,7 @@
                     $('#code').val(data.code);
                     $('#type').val(data.type);
                     $('#university_id').val(data.university_id);
+                    $('#status').val(data.status || 'active');
                     $('#naac_grade').val(data.naac_grade);
                     $('#nirf_ranking').val(data.nirf_ranking);
                     $('#established_year').val(data.established_year);

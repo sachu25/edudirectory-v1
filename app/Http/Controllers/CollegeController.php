@@ -70,6 +70,7 @@ class CollegeController extends Controller
             'type' => 'nullable|string',
             'official_email' => 'nullable|email|max:255',
             'established_year' => 'nullable|integer',
+            'status' => 'nullable|string|in:active,inactive',
         ]);
 
         $data = $request->except(['_token', 'college_id']);

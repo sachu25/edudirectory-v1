@@ -17,7 +17,7 @@ class College extends Model
         'district', 'state', 'country', 'pin_code', 'office_phone', 
         'office_mobile', 'official_email', 'student_strength', 
         'faculty_strength', 'courses_offered', 'hostel_facility', 
-        'placement_cell', 'remarks'
+        'placement_cell', 'remarks', 'status'
     ];
 
     public function university()

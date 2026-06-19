@@ -99,13 +99,9 @@
                                 @endif
                             </td>
                             <td>
-                                @if($college->university)
-                                <span class="badge {{ $college->university->status == 'active' ? 'bg-success' : 'bg-danger' }}">
-                                    {{ ucfirst($college->university->status) }}
+                                <span class="badge {{ $college->status == 'active' ? 'bg-success' : 'bg-danger' }}">
+                                    {{ ucfirst($college->status) }}
                                 </span>
-                                @else
-                                <span class="badge bg-secondary">N/A</span>
-                                @endif
                             </td>
                         </tr>
                         @empty
