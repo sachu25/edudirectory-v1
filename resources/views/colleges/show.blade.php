@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        College Details: {{ $college->name }}
+        Institution Details: {{ $college->name }}
     </x-slot>
 
     <div class="row g-4">
@@ -12,11 +12,11 @@
                 </div>
                 <div class="card-body">
                     <div class="row mb-3">
-                        <div class="col-sm-4 text-muted">College Name</div>
+                        <div class="col-sm-4 text-muted">Institution Name</div>
                         <div class="col-sm-8 fw-semibold">{{ $college->name }}</div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-sm-4 text-muted">College Code</div>
+                        <div class="col-sm-4 text-muted">Institution Code</div>
                         <div class="col-sm-8">{{ $college->code ?? 'N/A' }}</div>
                     </div>
                     <div class="row mb-3">
@@ -24,7 +24,11 @@
                         <div class="col-sm-8"><span class="badge bg-secondary">{{ $college->type ?? 'N/A' }}</span></div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-sm-4 text-muted">University</div>
+                        <div class="col-sm-4 text-muted">Category</div>
+                        <div class="col-sm-8"><span class="badge bg-primary">{{ $college->is_university ? 'University' : 'Institution' }}</span></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-4 text-muted">Affiliated University</div>
                         <div class="col-sm-8">{{ $college->university ? $college->university->name : 'N/A' }}</div>
                     </div>
                     <div class="row mb-3">
@@ -151,7 +155,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="5" class="text-center py-4 text-muted">No contact persons associated with this college.</td>
+                                    <td colspan="5" class="text-center py-4 text-muted">No contact persons associated with this institution.</td>
                                 </tr>
                                 @endforelse
                             </tbody>
@@ -215,7 +219,7 @@
                                 @endif
                                 @empty
                                 <tr>
-                                    <td colspan="6" class="text-center py-4 text-muted">No interactions recorded for this college yet.</td>
+                                    <td colspan="6" class="text-center py-4 text-muted">No interactions recorded for this institution yet.</td>
                                 </tr>
                                 @endforelse
                             </tbody>

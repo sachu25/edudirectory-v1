@@ -11,18 +11,18 @@
             <form action="{{ route('reports.index') }}" method="GET" id="filterForm">
                 <div class="row g-3 align-items-end">
                     <div class="col-md-3">
-                        <label for="university_id" class="form-label fw-semibold">University</label>
+                        <label for="university_id" class="form-label fw-semibold">Affiliated University</label>
                         <select name="university_id" id="university_id" class="form-select">
                             <option value="">All Universities</option>
-                            @foreach($universities as $university)
-                                <option value="{{ $university->id }}" {{ request('university_id') == $university->id ? 'selected' : '' }}>
-                                    {{ $university->name }}
+                            @foreach($universities as $uni)
+                                <option value="{{ $uni->id }}" {{ request('university_id') == $uni->id ? 'selected' : '' }}>
+                                    {{ $uni->name }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label for="type" class="form-label fw-semibold">College Type</label>
+                        <label for="type" class="form-label fw-semibold">Institution Type</label>
                         <select name="type" id="type" class="form-select">
                             <option value="">All Types</option>
                             <option value="Affiliated" {{ request('type') == 'Affiliated' ? 'selected' : '' }}>Affiliated</option>
@@ -73,8 +73,8 @@
                     <thead class="table-light">
                         <tr>
                             <th class="ps-3">Code</th>
-                            <th>College Name</th>
-                            <th>University</th>
+                            <th>Institution Name</th>
+                            <th>Affiliated University</th>
                             <th>Type</th>
                             <th>Official Email</th>
                             <th>Website</th>
@@ -86,7 +86,7 @@
                         <tr>
                             <td class="ps-3">{{ $college->code ?? 'N/A' }}</td>
                             <td class="fw-medium">{{ $college->name }}</td>
-                            <td>{{ $college->university ? $college->university->short_name ?? $college->university->name : 'N/A' }}</td>
+                            <td>{{ $college->university ? $college->university->name : 'N/A' }}</td>
                             <td>{{ $college->type }}</td>
                             <td>{{ $college->official_email ?? '-' }}</td>
                             <td>

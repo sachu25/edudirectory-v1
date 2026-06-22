@@ -19,14 +19,17 @@ class CollegeController extends Controller
             if ($request->filled('type')) {
                 $data->where('type', $request->type);
             }
+            if ($request->filled('is_university')) {
+                $data->where('is_university', $request->is_university === 'yes' ? 1 : 0);
+            }
             if ($request->filled('university_id')) {
                 $data->where('university_id', $request->university_id);
             }
 
             return Datatables::of($data)
                     ->addIndexColumn()
-                    ->addColumn('university', function($row){
-                        return $row->university ? $row->university->short_name ?? $row->university->name : 'N/A';
+                    ->addColumn('affiliated_university', function($row){
+                        return $row->university ? $row->university->name : 'N/A';
                     })
                     ->addColumn('action', function($row){
                            $btn = '';
@@ -45,7 +48,7 @@ class CollegeController extends Controller
                     ->make(true);
         }
         
-        $universities = University::where('status', 'active')->get();
+        $universities = University::where('status', 'active')->orderBy('name')->get();
         return view('colleges.index', compact('universities'));
     }
 
@@ -74,6 +77,7 @@ class CollegeController extends Controller
         ]);
 
         $data = $request->except(['_token', 'college_id']);
+        $data['is_university'] = $request->has('is_university') ? 1 : 0;
         $data['hostel_facility'] = $request->has('hostel_facility') ? 1 : 0;
         $data['placement_cell'] = $request->has('placement_cell') ? 1 : 0;
 
@@ -82,7 +86,7 @@ class CollegeController extends Controller
             $data
         );        
 
-        return response()->json(['success' => 'College saved successfully.']);
+        return response()->json(['success' => 'Institution saved successfully.']);
     }
 
     public function edit($id)
@@ -101,7 +105,7 @@ class CollegeController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $college = College::with(['university', 'contactPersons'])->findOrFail($id);
+        $college = College::with(['contactPersons', 'university'])->findOrFail($id);
         return view('colleges.show', compact('college'));
     }
 

@@ -3,17 +3,23 @@
 namespace App\Imports;
 
 use App\Models\College;
+use App\Models\ContactPerson;
+use App\Models\Designation;
+use App\Models\University;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
-use App\Models\University;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 
-class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmptyRows
+class UnifiedImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmptyRows
 {
     private $rowsCount = 0;
     private $updatedCount = 0;
+    
     private $collegesCache = null;
+    private $designationsCache = [];
+    private $currentRowIndex = 1;
+    public $skippedRows = [];
 
     public function normalizeCollegeName(string $name): array
     {
@@ -91,13 +97,11 @@ class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
                 return $college;
             }
 
-            // 2. Prefix / Subset match: check if one normalized name contains or starts with the other
-            // and the mismatch is relatively small (location suffix)
+            // 2. Prefix / Subset match
             $lenInput = strlen($normInput['full']);
             $lenExisting = strlen($normExisting['full']);
             if ($lenInput > 0 && $lenExisting > 0) {
                 if (strpos($normInput['full'], $normExisting['full']) === 0 || strpos($normExisting['full'], $normInput['full']) === 0) {
-                    // Ensure the shorter one is a significant part of the longer one to avoid matching completely different names
                     $minLen = min($lenInput, $lenExisting);
                     $maxLen = max($lenInput, $lenExisting);
                     if ($minLen / $maxLen >= 0.5) {
@@ -136,9 +140,21 @@ class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
 
     public function model(array $row)
     {
+        $this->currentRowIndex++;
+
+        // --- 1. PROCESS COLLEGE ---
         $affiliatedUniversity = isset($row['affiliated_university']) ? trim($row['affiliated_university']) : '';
                         
         $collegeName = isset($row['college_name']) ? trim($row['college_name']) : '';
+        if (empty($collegeName)) {
+            $this->skippedRows[] = [
+                'row' => $this->currentRowIndex,
+                'name' => $row['contact_name'] ?? 'N/A',
+                'reason' => 'College name is empty.'
+            ];
+            return null;
+        }
+
         $normInput = $this->normalizeCollegeName($collegeName);
 
         $type = isset($row['type']) ? trim($row['type']) : '';
@@ -161,34 +177,102 @@ class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
             $universityId = $uni->id;
         }
 
-        $existingCollege = $this->findExistingDuplicate($normInput);
+        $college = $this->findExistingDuplicate($normInput);
 
-        if ($existingCollege) {
-            $existingCollege->update([
-                'type' => $existingCollege->type ?: $type,
-                'university_id' => $universityId ?: $existingCollege->university_id,
-                'is_university' => $existingCollege->is_university || $isUniversity,
+        if ($college) {
+            $college->update([
+                'type' => $college->type ?: $type,
+                'university_id' => $universityId ?: $college->university_id,
+                'is_university' => $college->is_university || $isUniversity,
             ]);
-            $this->updatedCount++;
+        } else {
+            $college = College::create([
+                'name'                  => $collegeName,
+                'is_university'         => $isUniversity,
+                'type'                  => $type,
+                'university_id'         => $universityId,
+                'status'                => 'active',
+            ]);
+
+            if ($this->collegesCache !== null) {
+                $this->collegesCache[] = [
+                    'model' => $college,
+                    'normalized' => $normInput
+                ];
+            }
+        }
+
+        // --- 2. PROCESS CONTACT ---
+        $contactName = isset($row['contact_name']) ? trim($row['contact_name']) : '';
+        if (empty($contactName)) {
+            // If contact details are empty, we just skip creating a contact but college was processed
             return null;
         }
 
-        $college = College::create([
-            'name'                  => $collegeName,
-            'is_university'         => $isUniversity,
-            'type'                  => $type,
-            'university_id'         => $universityId,
-            'status'                => 'active',
-        ]);
-
-        if ($this->collegesCache !== null) {
-            $this->collegesCache[] = [
-                'model' => $college,
-                'normalized' => $normInput
+        $designationName = isset($row['designation']) ? trim($row['designation']) : '';
+        $designationLower = strtolower($designationName);
+        if (empty($designationLower)) {
+            $this->skippedRows[] = [
+                'row' => $this->currentRowIndex,
+                'name' => $contactName,
+                'reason' => 'Designation name is empty.'
             ];
+            return null;
         }
 
-        $this->rowsCount++;
+        if (array_key_exists($designationLower, $this->designationsCache)) {
+            $designation = $this->designationsCache[$designationLower];
+        } else {
+            $designation = Designation::whereRaw('LOWER(name) = ?', [$designationLower])->first();
+            if (!$designation) {
+                $designation = Designation::create([
+                    'name' => $designationName,
+                    'status' => 'active'
+                ]);
+            }
+            $this->designationsCache[$designationLower] = $designation;
+        }
+
+        $department = isset($row['department']) ? trim($row['department']) : null;
+        if ($department === '') {
+            $department = null;
+        }
+
+        $email = isset($row['email']) ? trim($row['email']) : null;
+        $mobile = isset($row['mobile']) ? trim($row['mobile']) : null;
+
+        // Check if contact person already exists under that college
+        $query = ContactPerson::where('college_id', $college->id)
+            ->where('designation_id', $designation->id);
+        
+        if ($department === null) {
+            $query->whereNull('department');
+        } else {
+            $query->whereRaw('LOWER(department) = ?', [strtolower($department)]);
+        }
+
+        $existingContact = $query->first();
+
+        if ($existingContact) {
+            $existingContact->update([
+                'name' => $contactName,
+                'email' => $email,
+                'mobile' => $mobile,
+            ]);
+            $this->updatedCount++;
+        } else {
+            ContactPerson::create([
+                'college_id' => $college->id,
+                'designation_id' => $designation->id,
+                'department' => $department,
+                'name' => $contactName,
+                'email' => $email,
+                'mobile' => $mobile,
+                'status' => 'active',
+            ]);
+            $this->rowsCount++;
+        }
+
         return null;
     }
 
@@ -201,12 +285,13 @@ class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
     {
         return $this->updatedCount;
     }
-    
+
     public function isEmptyWhen(array $row): bool
     {
         $collegeName = isset($row['college_name']) ? trim($row['college_name']) : '';
-        
-        return $collegeName === '';
+        $contactName = isset($row['contact_name']) ? trim($row['contact_name']) : '';
+
+        return $collegeName === '' && $contactName === '';
     }
 
     public function rules(): array
@@ -215,7 +300,11 @@ class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
             'college_name' => 'required|string',
             'type' => 'nullable|string',
             'affiliated_university' => 'nullable|string',
+            'contact_name' => 'required|string',
+            'designation' => 'required|string',
+            'department' => 'nullable|string',
+            'mobile' => 'nullable',
+            'email' => 'nullable|email',
         ];
     }
 }
-

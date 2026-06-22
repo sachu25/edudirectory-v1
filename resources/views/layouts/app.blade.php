@@ -198,13 +198,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('universities.*') ? 'active' : '' }}" href="{{ route('universities.index') }}">
-                                <i class="fas fa-university"></i> Universities
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('colleges.*') ? 'active' : '' }}" href="{{ route('colleges.index') }}">
-                                <i class="fas fa-graduation-cap"></i> Colleges
+                                <i class="fas fa-graduation-cap"></i> Institutions
                             </a>
                         </li>
                         <li class="nav-item">
@@ -222,8 +217,18 @@
                                 <i class="fas fa-chart-bar"></i> Reports
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('imports.*') || request()->routeIs('imports') ? 'active' : '' }}" href="{{ route('imports.index') }}">
+                                <i class="fas fa-file-import"></i> Imports
+                            </a>
+                        </li>
                         <li class="nav-item mt-3 mb-1 px-3 text-uppercase" style="font-size: 0.75rem; font-weight: bold; letter-spacing: 0.05em; color: rgba(255, 255, 255, 0.45) !important;">
                             Settings & Masters
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('universities.*') ? 'active' : '' }}" href="{{ route('universities.index') }}">
+                                <i class="fas fa-university"></i> Universities
+                            </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('designations.*') ? 'active' : '' }}" href="{{ route('designations.index') }}">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\University;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Validation\Rule;
 
 class UniversityController extends Controller
 {
@@ -21,11 +22,8 @@ class UniversityController extends Controller
                         return '<span class="badge bg-danger">Inactive</span>';
                     })
                     ->addColumn('action', function($row){
-                           $btn = '';
-                           if(auth()->user()->hasPermission('universities.edit')) {
-                               $btn .= '<button data-id="'.$row->id.'" class="editBtn btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>';
-                           }
-                           if(auth()->user()->hasPermission('universities.delete')) {
+                           $btn = '<button data-id="'.$row->id.'" class="editBtn btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>';
+                           if(auth()->user()->isAdmin()) {
                                $btn .= ' <button data-id="'.$row->id.'" class="deleteBtn btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>';
                            }
                            return $btn;
@@ -39,22 +37,15 @@ class UniversityController extends Controller
 
     public function store(Request $request)
     {
-        $permission = $request->university_id ? 'universities.edit' : 'universities.create';
-        if (!auth()->user()->hasPermission($permission)) {
-            return response()->json(['error' => 'Unauthorized action.'], 403);
-        }
-
         $request->validate([
             'name' => [
                 'required', 
                 'string', 
                 'max:255', 
-                \Illuminate\Validation\Rule::unique('universities', 'name')
+                Rule::unique('universities', 'name')
                     ->ignore($request->university_id)
                     ->whereNull('deleted_at')
             ],
-            'short_name' => 'nullable|string|max:50',
-            'state' => 'nullable|string|max:100',
             'status' => 'required|in:active,inactive'
         ]);
 
@@ -62,8 +53,6 @@ class UniversityController extends Controller
             ['id' => $request->university_id],
             [
                 'name' => $request->name,
-                'short_name' => $request->short_name,
-                'state' => $request->state,
                 'status' => $request->status
             ]
         );        
@@ -73,18 +62,14 @@ class UniversityController extends Controller
 
     public function edit($id)
     {
-        if (!auth()->user()->hasPermission('universities.edit')) {
-            return response()->json(['error' => 'Unauthorized action.'], 403);
-        }
-
         $university = University::find($id);
         return response()->json($university);
     }
 
     public function destroy($id)
     {
-        if (!auth()->user()->hasPermission('universities.delete')) {
-            return response()->json(['error' => 'Unauthorized action.'], 403);
+        if(!auth()->user()->isAdmin()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
         }
         
         University::find($id)->delete();

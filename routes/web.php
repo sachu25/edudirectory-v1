@@ -42,6 +42,8 @@ Route::middleware(['auth', 'role'])->group(function () {
     Route::get('reports/export/pdf', [ReportController::class, 'exportPdf'])->name('reports.export.pdf');
     Route::get('imports', [ImportController::class, 'index'])->name('imports.index');
     Route::post('imports', [ImportController::class, 'store'])->name('imports.store');
+    Route::get('imports/download-unified-template', [ImportController::class, 'downloadUnifiedTemplate'])->name('imports.download-unified-template');
+    Route::post('imports/unified', [ImportController::class, 'storeUnified'])->name('imports.unified');
     
     Route::middleware('role:admin')->group(function () {
         Route::resource('users', UserController::class);

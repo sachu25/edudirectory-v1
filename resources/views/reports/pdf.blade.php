@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Colleges Report</title>
+    <title>Institutions Report</title>
     <style>
         body { font-family: sans-serif; font-size: 12px; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
@@ -11,14 +11,14 @@
     </style>
 </head>
 <body>
-    <h2>Colleges Report</h2>
+    <h2>Institutions Report</h2>
     <p>Generated on: {{ date('Y-m-d H:i:s') }}</p>
     
     <table>
         <thead>
             <tr>
                 <th>No</th>
-                <th>College Name</th>
+                <th>Institution Name</th>
                 <th>Code</th>
                 <th>University</th>
                 <th>Type</th>

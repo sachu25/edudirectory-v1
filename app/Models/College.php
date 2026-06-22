@@ -12,7 +12,7 @@ class College extends Model
     use HasFactory, SoftDeletes, Auditable;
 
     protected $fillable = [
-        'university_id', 'name', 'code', 'type', 'naac_grade', 
+        'name', 'is_university', 'university_id', 'code', 'type', 'naac_grade', 
         'nirf_ranking', 'established_year', 'website', 'address', 
         'district', 'state', 'country', 'pin_code', 'office_phone', 
         'office_mobile', 'official_email', 'student_strength', 
@@ -20,9 +20,13 @@ class College extends Model
         'placement_cell', 'remarks', 'status'
     ];
 
+    protected $casts = [
+        'is_university' => 'boolean',
+    ];
+
     public function university()
     {
-        return $this->belongsTo(University::class);
+        return $this->belongsTo(University::class, 'university_id');
     }
 
     public function contactPersons()

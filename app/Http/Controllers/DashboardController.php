@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\College;
-use App\Models\University;
 use App\Models\ContactPerson;
 use App\Models\Interaction;
 use Carbon\Carbon;
@@ -15,7 +14,7 @@ class DashboardController extends Controller
     public function index()
     {
         $totalColleges = College::count();
-        $totalUniversities = University::count();
+        $totalUniversities = College::where('is_university', true)->count();
         $totalContacts = ContactPerson::count();
         $autonomousColleges = College::where('type', 'Autonomous')->count();
         $affiliatedColleges = College::where('type', 'Affiliated')->count();
@@ -33,12 +32,13 @@ class DashboardController extends Controller
         
         $universityWiseCount = College::with('university')
             ->selectRaw('university_id, count(*) as count')
+            ->whereNotNull('university_id')
             ->groupBy('university_id')
             ->get()
             ->mapWithKeys(function ($item) {
-                return [($item->university->short_name ?? $item->university->name ?? 'Unknown') => $item->count];
+                $name = $item->university ? $item->university->name : 'N/A';
+                return [$name => $item->count];
             });
-            
             
         $districtWiseCount = College::selectRaw('district, count(*) as count')
             ->whereNotNull('district')
@@ -46,7 +46,7 @@ class DashboardController extends Controller
             ->groupBy('district')
             ->pluck('count', 'district');
             
-        $recentColleges = College::with('university')->latest()->take(5)->get();
+        $recentColleges = College::latest()->take(5)->get();
 
         return view('dashboard', compact(
             'totalColleges', 'totalUniversities', 'totalContacts', 

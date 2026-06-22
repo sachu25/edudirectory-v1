@@ -14,6 +14,7 @@ class ReportController extends Controller
     public function index(Request $request)
     {
         $universities = University::where('status', 'active')->orderBy('name')->get();
+
         $query = College::with('university');
 
         if ($request->filled('university_id')) {

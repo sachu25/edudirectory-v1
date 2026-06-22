@@ -1,18 +1,18 @@
 <x-app-layout>
     <x-slot name="header">
-        College Master
+        Institution Master
     </x-slot>
 
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center py-3">
-            <h6 class="mb-0 fw-bold">Manage Colleges</h6>
+            <h6 class="mb-0 fw-bold">Manage Institutions</h6>
             <div class="d-flex gap-2">
                 @can('colleges.create')
                 <button class="btn btn-outline-primary btn-sm" id="btnBulkImport">
                     <i class="fas fa-file-upload"></i> Bulk Import
                 </button>
                 <button class="btn btn-primary btn-sm" id="createNewCollege">
-                    <i class="fas fa-plus"></i> Add New College
+                    <i class="fas fa-plus"></i> Add New Institution
                 </button>
                 @endcan
             </div>
@@ -20,8 +20,8 @@
         <div class="card-body">
             <!-- Filter Options -->
             <div class="row mb-4 align-items-end g-3">
-                <div class="col-md-4">
-                    <label for="filter_type" class="form-label fw-semibold text-muted small text-uppercase">Filter by College Type</label>
+                <div class="col-md-3">
+                    <label for="filter_type" class="form-label fw-semibold text-muted small text-uppercase">Filter by Type</label>
                     <select class="form-select select2-filter" id="filter_type">
                         <option value="">All Types</option>
                         <option value="Affiliated">Affiliated</option>
@@ -31,12 +31,20 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
-                <div class="col-md-4">
-                    <label for="filter_university_id" class="form-label fw-semibold text-muted small text-uppercase">Filter by University</label>
+                <div class="col-md-3">
+                    <label for="filter_is_university" class="form-label fw-semibold text-muted small text-uppercase">Filter by Category</label>
+                    <select class="form-select select2-filter" id="filter_is_university">
+                        <option value="">All Categories</option>
+                        <option value="yes">Universities Only</option>
+                        <option value="no">Colleges Only</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="filter_university_id" class="form-label fw-semibold text-muted small text-uppercase">Filter by Affiliated University</label>
                     <select class="form-select select2-filter" id="filter_university_id">
                         <option value="">All Universities</option>
-                        @foreach($universities as $university)
-                            <option value="{{ $university->id }}">{{ $university->name }}</option>
+                        @foreach($universities as $uni)
+                            <option value="{{ $uni->id }}">{{ $uni->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -54,8 +62,9 @@
                         <tr>
                             <th>No</th>
                             <th>Code</th>
-                            <th>College Name</th>
-                            <th>University</th>
+                            <th>Institution Name</th>
+                            <th>Category</th>
+                            <th>Affiliated University</th>
                             <th>Type</th>
                             <th>District</th>
                             <th width="120px">Action</th>
@@ -73,14 +82,14 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title"><i class="fas fa-file-upload me-2"></i> Bulk Import Colleges</h5>
+                    <h5 class="modal-title"><i class="fas fa-file-upload me-2"></i> Bulk Import Institutions</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4">
                     <div class="row g-4">
                         <div class="col-md-6 border-end">
                             <h6 class="fw-bold mb-3">Upload File</h6>
-                            <p class="text-muted small mb-4">Select an Excel or CSV file to bulk import college records.</p>
+                            <p class="text-muted small mb-4">Select an Excel or CSV file to bulk import institution records.</p>
                             
                             <form action="{{ route('imports.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
@@ -105,11 +114,11 @@
                                 <ul class="list-unstyled mb-0">
                                     <li><i class="fas fa-check-circle text-success me-1"></i> <code>college_name</code> <span class="text-danger">*</span></li>
                                     <li><i class="fas fa-check-circle text-success me-1"></i> <code>type</code></li>
-                                    <li><i class="fas fa-check-circle text-success me-1"></i> <code>university_name</code></li>
+                                    <li><i class="fas fa-check-circle text-success me-1"></i> <code>affiliated_university</code></li>
                                 </ul>
                             </div>
                             <div class="alert alert-info border-0 small mt-3 p-2 mb-0" style="font-size: 0.75rem;">
-                                <i class="fas fa-info-circle me-1"></i> If the <strong>university_name</strong> does not match an existing university or is left blank, it will be saved as blank/unassociated.
+                                <i class="fas fa-info-circle me-1"></i> Any institution name containing the word "university" will automatically be categorized as a University.
                             </div>
                         </div>
                     </div>
@@ -132,16 +141,16 @@
                         
                         <div class="row g-3">
                             <div class="col-md-12">
-                                <label for="name" class="form-label fw-semibold">College Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter College Name" maxlength="255" required>
+                                <label for="name" class="form-label fw-semibold">Institution Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Institution Name" maxlength="255" required>
                             </div>
 
-                            <div class="col-md-4">
-                                <label for="code" class="form-label fw-semibold">College Code</label>
+                            <div class="col-md-3">
+                                <label for="code" class="form-label fw-semibold">Institution Code</label>
                                 <input type="text" class="form-control" id="code" name="code" placeholder="e.g. C-12345" maxlength="50">
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label for="type" class="form-label fw-semibold">Type</label>
                                 <select class="form-select" id="type" name="type">
                                     <option value="">Select Type</option>
@@ -153,14 +162,22 @@
                                 </select>
                             </div>
 
-                            <div class="col-md-4">
-                                <label for="university_id" class="form-label fw-semibold">University</label>
+                             <div class="col-md-3">
+                                <label for="university_id" class="form-label fw-semibold">Affiliated University</label>
                                 <select class="form-select" id="university_id" name="university_id">
                                     <option value="">Select University</option>
-                                    @foreach($universities as $university)
-                                        <option value="{{ $university->id }}">{{ $university->name }}</option>
+                                    @foreach($universities as $uni)
+                                        <option value="{{ $uni->id }}">{{ $uni->name }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold d-block">Category</label>
+                                <div class="form-check form-switch mt-2">
+                                    <input class="form-check-input" type="checkbox" id="is_university" name="is_university" value="1">
+                                    <label class="form-check-label fw-semibold" for="is_university">Is University?</label>
+                                </div>
                             </div>
 
                             <div class="col-md-3">
@@ -185,12 +202,12 @@
 
                             <div class="col-md-6">
                                 <label for="official_email" class="form-label fw-semibold">Official Email</label>
-                                <input type="email" class="form-control" id="official_email" name="official_email" placeholder="info@college.edu">
+                                <input type="email" class="form-control" id="official_email" name="official_email" placeholder="info@institution.edu">
                             </div>
 
                             <div class="col-md-6">
                                 <label for="website" class="form-label fw-semibold">Website</label>
-                                <input type="text" class="form-control" id="website" name="website" placeholder="https://www.college.edu">
+                                <input type="text" class="form-control" id="website" name="website" placeholder="https://www.institution.edu">
                             </div>
 
                             <div class="col-md-6">
@@ -298,6 +315,7 @@
                     url: "{{ route('colleges.index') }}",
                     data: function (d) {
                         d.type = $('#filter_type').val();
+                        d.is_university = $('#filter_is_university').val();
                         d.university_id = $('#filter_university_id').val();
                     }
                 },
@@ -305,7 +323,10 @@
                     {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
                     {data: 'code', name: 'code'},
                     {data: 'name', name: 'name'},
-                    {data: 'university', name: 'university.name'},
+                    {data: 'is_university', name: 'is_university', render: function(data) {
+                        return data ? '<span class="badge bg-primary">University</span>' : '<span class="badge bg-secondary">Institution</span>';
+                    }},
+                    {data: 'affiliated_university', name: 'affiliated_university'},
                     {data: 'type', name: 'type'},
                     {data: 'district', name: 'district'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
@@ -319,13 +340,14 @@
             });
             
             // Redraw table when filters change
-            $('#filter_type, #filter_university_id').on('change', function() {
+            $('#filter_type, #filter_is_university, #filter_university_id').on('change', function() {
                 table.draw();
             });
 
             // Reset filters and redraw
             $('#resetFilterBtn').click(function() {
                 $('#filter_type').val(null).trigger('change');
+                $('#filter_is_university').val(null).trigger('change');
                 $('#filter_university_id').val(null).trigger('change');
             });
             
@@ -333,7 +355,8 @@
                 $('#saveBtn').val("create-college");
                 $('#college_id').val('');
                 $('#collegeForm').trigger("reset");
-                $('#modelHeading').html("Create New College");
+                $('#is_university').prop('checked', false);
+                $('#modelHeading').html("Create New Institution");
                 $('#ajaxModel').modal('show');
             });
 
@@ -344,7 +367,7 @@
             $('body').on('click', '.editBtn', function () {
                 var college_id = $(this).data('id');
                 $.get("{{ route('colleges.index') }}" +'/' + college_id +'/edit', function (data) {
-                    $('#modelHeading').html("Edit College");
+                    $('#modelHeading').html("Edit Institution");
                     $('#saveBtn').val("edit-college");
                     $('#ajaxModel').modal('show');
                     
@@ -371,6 +394,12 @@
                     $('#courses_offered').val(data.courses_offered);
                     $('#remarks').val(data.remarks);
                     
+                    if(data.is_university) {
+                        $('#is_university').prop('checked', true);
+                    } else {
+                        $('#is_university').prop('checked', false);
+                    }
+
                     if(data.hostel_facility) {
                         $('#hostel_facility').prop('checked', true);
                     } else {

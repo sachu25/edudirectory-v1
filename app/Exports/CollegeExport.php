@@ -19,7 +19,7 @@ class CollegeExport implements FromCollection, WithHeadings, WithMapping
 
     public function collection()
     {
-        $query = College::with('university');
+        $query = College::query();
 
         if ($this->request->filled('university_id')) {
             $query->where('university_id', $this->request->university_id);
@@ -38,10 +38,11 @@ class CollegeExport implements FromCollection, WithHeadings, WithMapping
     {
         return [
             'ID',
-            'College Name',
+            'Institution Name',
+            'Is University',
             'Code',
             'Type',
-            'University Name',
+            'Affiliated University',
             'NAAC Grade',
             'NIRF Ranking',
             'Established Year',
@@ -63,6 +64,7 @@ class CollegeExport implements FromCollection, WithHeadings, WithMapping
         return [
             $college->id,
             $college->name,
+            $college->is_university ? 'Yes' : 'No',
             $college->code,
             $college->type,
             $college->university ? $college->university->name : 'N/A',

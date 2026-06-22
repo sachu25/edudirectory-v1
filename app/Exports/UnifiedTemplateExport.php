@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 
-class CollegeTemplateExport implements FromArray, WithHeadings, WithEvents
+class UnifiedTemplateExport implements FromArray, WithHeadings, WithEvents
 {
     /**
      * @return array
@@ -19,7 +19,12 @@ class CollegeTemplateExport implements FromArray, WithHeadings, WithEvents
             [
                 'Example College of Technology',
                 'Autonomous',
-                'APJ Abdul Kalam Technological University'
+                'APJ Abdul Kalam Technological University',
+                'Dr. John Doe',
+                'Principal',
+                'Computer Science',
+                '9876543210',
+                'johndoe@example.com'
             ]
         ];
     }
@@ -32,7 +37,12 @@ class CollegeTemplateExport implements FromArray, WithHeadings, WithEvents
         return [
             'college_name',
             'type',
-            'affiliated_university'
+            'affiliated_university',
+            'contact_name',
+            'designation',
+            'department',
+            'mobile',
+            'email'
         ];
     }
 
@@ -59,7 +69,6 @@ class CollegeTemplateExport implements FromArray, WithHeadings, WithEvents
                 // Hide the validation lists sheet
                 $validationSheet->setSheetState(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::SHEETSTATE_HIDDEN);
 
-                // Apply Data Validation dropdowns to cells from Row 2 to Row 150
                 $typeValidationRange = 'ValidationLists!$A$1:$A$' . count($types);
 
                 for ($row = 2; $row <= 150; $row++) {

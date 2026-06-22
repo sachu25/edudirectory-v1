@@ -48,9 +48,9 @@
             <!-- Filter Options -->
             <div class="row mb-4 align-items-end g-3">
                 <div class="col-md-6 col-lg-4">
-                    <label for="filter_college_id" class="form-label fw-semibold text-muted small text-uppercase">Filter by College</label>
+                    <label for="filter_college_id" class="form-label fw-semibold text-muted small text-uppercase">Filter by Institution</label>
                     <select class="form-select select2-filter" id="filter_college_id">
-                        <option value="">All Colleges</option>
+                        <option value="">All Institutions</option>
                         @foreach($colleges as $college)
                             <option value="{{ $college->id }}">{{ $college->name }}</option>
                         @endforeach
@@ -69,7 +69,7 @@
                     <thead class="table-light">
                         <tr>
                             <th>No</th>
-                            <th>College</th>
+                            <th>Institution</th>
                             <th>Name</th>
                             <th>Designation</th>
                             <th>Department</th>
@@ -129,7 +129,7 @@
                                 </ul>
                             </div>
                             <div class="alert alert-warning border-0 small mt-3 p-2 mb-0" style="font-size: 0.75rem;">
-                                <i class="fas fa-exclamation-triangle me-1"></i> If the <strong>college_name</strong> does not match an existing college, that row will be skipped. Designations will be created automatically.
+                                <i class="fas fa-exclamation-triangle me-1"></i> If the <strong>college_name</strong> does not match an existing institution, that row will be skipped. Designations will be created automatically.
                             </div>
                         </div>
                     </div>
@@ -151,9 +151,9 @@
                         <input type="hidden" name="contact_id" id="contact_id">
                         
                         <div class="mb-3">
-                            <label for="college_id" class="form-label fw-semibold">College <span class="text-danger">*</span></label>
+                            <label for="college_id" class="form-label fw-semibold">Institution <span class="text-danger">*</span></label>
                             <select class="form-select" id="college_id" name="college_id" required>
-                                <option value="">Select College</option>
+                                <option value="">Select Institution</option>
                                 @foreach($colleges as $college)
                                     <option value="{{ $college->id }}">{{ $college->name }}</option>
                                 @endforeach
@@ -228,8 +228,14 @@
             // Initialize Select2 filter
             $('.select2-filter').select2({
                 theme: 'bootstrap-5',
-                placeholder: 'All Colleges',
+                placeholder: 'All Institutions',
                 allowClear: true
+            });
+
+            // Initialize Select2 inside create/edit modal
+            $('#college_id').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#ajaxModel')
             });
             
             $.ajaxSetup({
@@ -283,6 +289,7 @@
                 $('#saveBtn').val("create-contact");
                 $('#contact_id').val('');
                 $('#contactForm').trigger("reset");
+                $('#college_id').val('').trigger('change');
                 $('#modelHeading').html("Create New Contact");
                 $('#ajaxModel').modal('show');
             });
@@ -294,7 +301,7 @@
                     $('#saveBtn').val("edit-contact");
                     $('#ajaxModel').modal('show');
                     $('#contact_id').val(data.id);
-                    $('#college_id').val(data.college_id);
+                    $('#college_id').val(data.college_id).trigger('change');
                     $('#name').val(data.name);
                     $('#designation_id').val(data.designation_id);
                     $('#department').val(data.department);

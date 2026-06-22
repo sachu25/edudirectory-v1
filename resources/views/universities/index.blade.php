@@ -6,11 +6,9 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center py-3">
             <h6 class="mb-0 fw-bold">Manage Universities</h6>
-            @can('universities.create')
             <button class="btn btn-primary btn-sm" id="createNewUniversity">
                 <i class="fas fa-plus"></i> Add New University
             </button>
-            @endcan
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -19,8 +17,6 @@
                         <tr>
                             <th>No</th>
                             <th>Name</th>
-                            <th>Short Name</th>
-                            <th>State</th>
                             <th>Status</th>
                             <th width="100px">Action</th>
                         </tr>
@@ -46,17 +42,7 @@
                         
                         <div class="mb-3">
                             <label for="name" class="form-label fw-semibold">University Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter University Name" value="" maxlength="255" required>
-                        </div>
-        
-                        <div class="mb-3">
-                            <label for="short_name" class="form-label fw-semibold">Short Name</label>
-                            <input type="text" class="form-control" id="short_name" name="short_name" placeholder="e.g. DU, JNU" value="" maxlength="50">
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label for="state" class="form-label fw-semibold">State</label>
-                            <input type="text" class="form-control" id="state" name="state" placeholder="Enter State" value="" maxlength="100">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter University" value="" maxlength="255" required>
                         </div>
                         
                         <div class="mb-3">
@@ -93,8 +79,6 @@
                 columns: [
                     {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
                     {data: 'name', name: 'name'},
-                    {data: 'short_name', name: 'short_name'},
-                    {data: 'state', name: 'state'},
                     {data: 'status_badge', name: 'status'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ],
@@ -118,12 +102,10 @@
                 var university_id = $(this).data('id');
                 $.get("{{ route('universities.index') }}" +'/' + university_id +'/edit', function (data) {
                     $('#modelHeading').html("Edit University");
-                    $('#saveBtn').val("edit-user");
+                    $('#saveBtn').val("edit-university");
                     $('#ajaxModel').modal('show');
                     $('#university_id').val(data.id);
                     $('#name').val(data.name);
-                    $('#short_name').val(data.short_name);
-                    $('#state').val(data.state);
                     $('#status').val(data.status);
                 })
             });
@@ -164,7 +146,7 @@
                         } else if (data.responseJSON && data.responseJSON.message) {
                             errorMsg = data.responseJSON.message;
                         }
-
+ 
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',

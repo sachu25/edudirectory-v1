@@ -22,9 +22,9 @@
             <!-- Filter Row -->
             <div class="row mb-4 align-items-end g-3">
                 <div class="col-md-5 col-lg-4">
-                    <label for="filter_college_id" class="form-label fw-semibold text-secondary" style="font-size: 0.85rem; text-uppercase; letter-spacing: 0.5px;">Filter by College</label>
+                    <label for="filter_college_id" class="form-label fw-semibold text-secondary" style="font-size: 0.85rem; text-uppercase; letter-spacing: 0.5px;">Filter by Institution</label>
                     <select class="form-select" id="filter_college_id">
-                        <option value="">All Colleges</option>
+                        <option value="">All Institutions</option>
                         @foreach($colleges as $college)
                             <option value="{{ $college->id }}">{{ $college->name }}</option>
                         @endforeach
@@ -43,7 +43,7 @@
                     <thead class="table-light">
                         <tr>
                             <th>Date</th>
-                            <th>College</th>
+                            <th>Institution</th>
                             <th>Contact Person</th>
                             <th>Mode</th>
                             <th>Purposes</th>
@@ -73,9 +73,9 @@
                         
                         <div class="row g-3 mb-3">
                             <div class="col-md-6">
-                                <label for="college_id" class="form-label fw-semibold">College <span class="text-danger">*</span></label>
+                                <label for="college_id" class="form-label fw-semibold">Institution <span class="text-danger">*</span></label>
                                 <select class="form-select" id="college_id" name="college_id" required>
-                                    <option value="">Select College</option>
+                                    <option value="">Select Institution</option>
                                     @foreach($colleges as $college)
                                         <option value="{{ $college->id }}">{{ $college->name }}</option>
                                     @endforeach
@@ -128,8 +128,8 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="college_response" class="form-label fw-semibold">College Response</label>
-                            <textarea class="form-control" id="college_response" name="college_response" rows="3" placeholder="What did the college say?"></textarea>
+                            <label for="college_response" class="form-label fw-semibold">Institution Response</label>
+                            <textarea class="form-control" id="college_response" name="college_response" rows="3" placeholder="What did the institution say?"></textarea>
                         </div>
 
                         <div class="mb-3">
@@ -178,6 +178,11 @@
                 theme: 'bootstrap-5',
                 dropdownParent: $('#ajaxModel')
             });
+
+            $('#college_id').select2({
+                theme: 'bootstrap-5',
+                dropdownParent: $('#ajaxModel')
+            });
             
             var table = $('.data-table').DataTable({
                 processing: true,
@@ -210,7 +215,7 @@
             // Initialize Select2 on Filter and Redraw on change
             $('#filter_college_id').select2({
                 theme: 'bootstrap-5',
-                placeholder: 'Filter by College',
+                placeholder: 'Filter by Institution',
                 allowClear: true
             }).on('change', function() {
                 table.draw();
@@ -243,6 +248,7 @@
                 $('#saveBtn').val("create-interaction");
                 $('#interaction_id').val('');
                 $('#interactionForm').trigger("reset");
+                $('#college_id').val('').trigger('change');
                 $('#purposes').val(null).trigger('change');
                 $('#contact_person_id').html('<option value="">Select Contact Person</option>');
                 
@@ -264,7 +270,7 @@
                     $('#modelHeading').html("Edit Interaction");
                     $('#saveBtn').val("edit-interaction");
                     $('#interaction_id').val(data.id);
-                    $('#college_id').val(data.college_id);
+                    $('#college_id').val(data.college_id).trigger('change');
                     $('#user_id').val(data.user_id);
                     
                     // Fetch contacts and then set the selected one

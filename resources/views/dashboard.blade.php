@@ -19,7 +19,7 @@
                     </div>
                     <div>
                         <h4 class="fw-bold mb-1 text-white">Welcome back, {{ Auth::user()->name }}!</h4>
-                        <p class="mb-0 text-white-50">Here's a quick overview of your college directory and latest client interactions.</p>
+                        <p class="mb-0 text-white-50">Here's a quick overview of your institution directory and latest client interactions.</p>
                     </div>
                 </div>
             </div>
@@ -32,7 +32,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Total Colleges</h6>
+                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Total Institutions</h6>
                             <h3 class="mb-0 fw-bold text-dark">{{ $totalColleges }}</h3>
                         </div>
                         <div class="p-3 rounded-circle" style="background: rgba(79, 70, 229, 0.1); color: var(--primary-color);">
@@ -78,7 +78,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Autonomous Colleges</h6>
+                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Autonomous Institutions</h6>
                             <h3 class="mb-0 fw-bold text-dark">{{ $autonomousColleges }}</h3>
                         </div>
                         <div class="p-3 rounded-circle" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">
@@ -93,7 +93,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Affiliated Colleges</h6>
+                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Affiliated Institutions</h6>
                             <h3 class="mb-0 fw-bold text-dark">{{ $affiliatedColleges }}</h3>
                         </div>
                         <div class="p-3 rounded-circle" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B;">
@@ -108,7 +108,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Colleges Added This Month</h6>
+                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Institutions Added This Month</h6>
                             <h3 class="mb-0 fw-bold text-dark">{{ $addedThisMonth }}</h3>
                         </div>
                         <div class="p-3 rounded-circle" style="background: rgba(139, 92, 246, 0.1); color: #8B5CF6;">
@@ -124,7 +124,7 @@
         <div class="col-12 col-lg-8">
             <div class="card h-100">
                 <div class="card-header d-flex justify-content-between align-items-center py-3">
-                    <h6 class="mb-0 fw-bold text-dark">Recently Registered Colleges</h6>
+                    <h6 class="mb-0 fw-bold text-dark">Recently Registered Institutions</h6>
                     <a href="{{ route('colleges.index') }}" class="btn btn-sm btn-outline-primary px-3" style="border-radius: 8px;">View All</a>
                 </div>
                 <div class="card-body p-0">
@@ -132,8 +132,8 @@
                         <table class="table table-hover align-middle mb-0">
                             <thead class="table-light text-secondary" style="font-size: 0.85rem; text-uppercase; letter-spacing: 0.5px;">
                                 <tr>
-                                    <th class="ps-4 py-3">College Name</th>
-                                    <th class="py-3">University</th>
+                                    <th class="ps-4 py-3">Institution Name</th>
+                                    <th class="py-3">Affiliated University</th>
                                     <th class="py-3">Type</th>
                                     <th class="py-3">City/District</th>
                                 </tr>
@@ -145,7 +145,7 @@
                                     <td>
                                         <span class="badge bg-light text-dark border py-2 px-2" style="border-radius: 6px; font-weight: 500;">
                                             <i class="fas fa-university text-muted me-1"></i>
-                                            {{ $college->university->short_name ?? $college->university->name ?? 'N/A' }}
+                                            {{ $college->affiliated_university ?? 'N/A' }}
                                         </span>
                                     </td>
                                     <td>
@@ -161,7 +161,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="4" class="text-center py-4 text-muted">No colleges added yet.</td>
+                                    <td colspan="4" class="text-center py-4 text-muted">No institutions added yet.</td>
                                 </tr>
                                 @endforelse
                             </tbody>
@@ -174,7 +174,7 @@
         <div class="col-12 col-lg-4">
             <div class="card h-100">
                 <div class="card-header py-3">
-                    <h6 class="mb-0 fw-bold text-dark">College Interaction Coverage</h6>
+                    <h6 class="mb-0 fw-bold text-dark">Institution Interaction Coverage</h6>
                 </div>
                 <div class="card-body d-flex flex-column justify-content-center">
                     <div style="position: relative; height: 260px; width: 100%;">
@@ -210,7 +210,7 @@
                     ctx.fillStyle = '#64748B';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText('No colleges registered yet.', ctx.canvas.width / 2, ctx.canvas.height / 2);
+                    ctx.fillText('No institutions registered yet.', ctx.canvas.width / 2, ctx.canvas.height / 2);
                     return;
                 }
 
