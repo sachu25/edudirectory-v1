@@ -207,16 +207,6 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('non-academic-clients.*') ? 'active' : '' }}" href="{{ route('non-academic-clients.index') }}">
-                                <i class="fas fa-building"></i> Non-Academic Clients
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('non-academic-interactions.*') ? 'active' : '' }}" href="{{ route('non-academic-interactions.index') }}">
-                                <i class="fas fa-handshake"></i> Non-Academic Interactions
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('contacts.*') ? 'active' : '' }}" href="{{ route('contacts.index') }}">
                                 <i class="fas fa-address-book"></i> Contacts
                             </a>
@@ -224,6 +214,16 @@
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('interactions.*') ? 'active' : '' }}" href="{{ route('interactions.index') }}">
                                 <i class="fas fa-handshake"></i> Interactions
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('non-academic-clients.*') ? 'active' : '' }}" href="{{ route('non-academic-clients.index') }}">
+                                <i class="fas fa-building"></i> Non-Academic Clients
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('non-academic-interactions.*') ? 'active' : '' }}" href="{{ route('non-academic-interactions.index') }}">
+                                <i class="fas fa-handshake"></i> Non-Academic Interactions
                             </a>
                         </li>
                         <li class="nav-item">
