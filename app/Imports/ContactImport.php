@@ -9,9 +9,13 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
 
-class ContactImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmptyRows
+class ContactImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmptyRows, SkipsOnFailure
 {
+    use SkipsFailures;
+
     private $rowsCount = 0;
     private $updatedCount = 0;
     private $collegesCache = [];

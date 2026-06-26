@@ -51,6 +51,7 @@ class UnifiedImportTest extends TestCase
             // Row 1: Completely new college & contact
             [
                 'college_name' => 'New Horizon College',
+                'state' => 'Karnataka',
                 'type' => 'Autonomous',
                 'affiliated_university' => 'State Technical University',
                 'contact_name' => 'Prof. Alice Green',
@@ -62,6 +63,7 @@ class UnifiedImportTest extends TestCase
             // Row 2: Match existing college (typo & suffix), new contact
             [
                 'college_name' => 'ACE collge of Engineering, Pune',
+                'state' => 'Maharashtra',
                 'type' => 'Affiliated',
                 'affiliated_university' => 'State Technical University',
                 'contact_name' => 'Prof. Bob Blue',
@@ -73,6 +75,7 @@ class UnifiedImportTest extends TestCase
             // Row 3: Match existing college & existing contact -> should update details
             [
                 'college_name' => 'ACE College of Engineering',
+                'state' => 'Kerala',
                 'type' => 'Affiliated',
                 'affiliated_university' => 'State Technical University',
                 'contact_name' => 'Dr. Updated Name',

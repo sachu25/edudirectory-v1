@@ -71,6 +71,7 @@
                                     <span class="badge bg-primary mb-2">Institution Data</span>
                                     <ul class="small text-muted ps-3 mb-0">
                                         <li><code>college_name</code> <span class="text-danger">*</span></li>
+                                        <li><code>state</code> <span class="text-danger">*</span></li>
                                         <li><code>type</code> (Affiliated/Autonomous)</li>
                                         <li><code>affiliated_university</code></li>
                                     </ul>
@@ -129,8 +130,9 @@
                         <div class="card-body p-4">
                             <h6 class="fw-bold mb-3 text-dark"><i class="fas fa-info-circle text-primary me-2"></i> Institution Format Instructions</h6>
                             <p class="small text-muted">Please ensure your sheet contains a header row with the following column names:</p>
-                                                        <ul class="small text-muted ps-3 mb-4">
+                            <ul class="small text-muted ps-3 mb-4">
                                 <li><code>college_name</code> (Required)</li>
+                                <li><code>state</code> (Required)</li>
                                 <li><code>type</code> (Autonomous, Affiliated, etc.)</li>
                                 <li><code>affiliated_university</code> (Optional)</li>
                             </ul>
@@ -193,6 +195,40 @@
         </div>
 
     </div>
+
+    <!-- Import Validation Failures summary -->
+    @if (session('import_failures'))
+        <div class="card border-0 shadow-sm mt-4">
+            <div class="card-header bg-danger text-white py-3 d-flex align-items-center">
+                <i class="fas fa-exclamation-triangle me-2 fs-5"></i>
+                <h6 class="mb-0 fw-bold">Import Validation Failures Summary</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped align-middle mb-0 small">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="ps-3" style="width: 100px;">Excel Row</th>
+                                <th>Column/Field</th>
+                                <th>Error Message</th>
+                                <th>Value Entered</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (session('import_failures') as $failure)
+                                <tr>
+                                    <td class="fw-bold text-muted ps-3">Row {{ $failure->row() }}</td>
+                                    <td class="fw-semibold text-danger">{{ $failure->attribute() }}</td>
+                                    <td>{{ $failure->errors()[0] }}</td>
+                                    <td><code class="bg-light p-1 rounded text-dark">{{ is_array($failure->values()[$failure->attribute()] ?? '') ? json_encode($failure->values()[$failure->attribute()]) : ($failure->values()[$failure->attribute()] ?? 'N/A') }}</code></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <!-- Skipped items summary -->
     @if (session('skipped_contacts'))

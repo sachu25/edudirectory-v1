@@ -21,7 +21,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="type" class="form-label fw-semibold">Institution Type</label>
                         <select name="type" id="type" class="form-select">
                             <option value="">All Types</option>
@@ -32,6 +32,15 @@
                             <option value="Other" {{ request('type') == 'Other' ? 'selected' : '' }}>Other</option>
                         </select>
                     </div>
+                    <div class="col-md-3">
+                        <label for="state" class="form-label fw-semibold">State</label>
+                        <select name="state" id="state" class="form-select">
+                            <option value="">All States</option>
+                            @foreach($states as $st)
+                                <option value="{{ $st }}" {{ request('state') == $st ? 'selected' : '' }}>{{ $st }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="col-md-2">
                         <label for="status" class="form-label fw-semibold">Status</label>
                         <select name="status" id="status" class="form-select">
@@ -40,7 +49,7 @@
                             <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <button type="submit" class="btn btn-primary"><i class="fas fa-search me-1"></i> Filter</button>
                         <a href="{{ route('reports.index') }}" class="btn btn-light border"><i class="fas fa-redo me-1"></i> Reset</a>
                     </div>

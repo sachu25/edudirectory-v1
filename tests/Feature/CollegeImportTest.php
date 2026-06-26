@@ -54,54 +54,63 @@ class CollegeImportTest extends TestCase
             // Exact same: should update (not duplicate)
             [
                 'college_name' => 'ACE College of Engineering',
+                'state' => 'kerala',
                 'type' => 'Affiliated',
                 'affiliated_university' => 'State Technical University',
             ],
             // Suffix with location (comma): should match college1
             [
                 'college_name' => 'ACE College of Engineering, Thiruvananthapuram',
+                'state' => 'Kerala',
                 'type' => 'Affiliated',
                 'affiliated_university' => 'State Technical University',
             ],
             // Suffix with location (space): should match college1
             [
                 'college_name' => 'ACE College of Engineering Thiruvallam',
+                'state' => 'Kerala',
                 'type' => 'Affiliated',
                 'affiliated_university' => 'State Technical University',
             ],
             // Spelling typo (collge): should match college1
             [
                 'college_name' => 'ACE collge of Engineering',
+                'state' => 'Kerala',
                 'type' => 'Affiliated',
                 'affiliated_university' => 'State Technical University',
             ],
             // Case and punctuation: should match college2
             [
                 'college_name' => 'ABEDA INAMDAR SENIOR COLLEGE OF ARTS, SCIENCE & COMMERCE (AUTONOMOUS)',
+                'state' => 'MAHARASHTRA',
                 'type' => 'Autonomous',
                 'affiliated_university' => 'State Technical University',
             ],
             // Long suffix: should match college3
             [
                 'college_name' => 'Aarupadai veedu Institute of Technology , Vinayaka Mission\'s Research Foundation',
+                'state' => 'tamilnadu',
                 'type' => 'Affiliated',
                 'affiliated_university' => 'State Technical University',
             ],
             // Match Al-Ameen with no hyphen
             [
                 'college_name' => 'Al Ameen Engineering College',
+                'state' => 'Kerala',
                 'type' => 'Affiliated',
                 'affiliated_university' => 'State Technical University',
             ],
             // Should NOT match Al-Ameen, should create a new college
             [
                 'college_name' => 'Al-Asma School, Chattergam',
+                'state' => 'Jammu and Kashmir',
                 'type' => 'Affiliated',
                 'affiliated_university' => 'State Technical University',
             ],
             // New college (which is a University): should be auto-detected as is_university = true
             [
                 'college_name' => 'New Horizon University',
+                'state' => 'Karnataka',
                 'type' => 'Autonomous',
                 'affiliated_university' => '',
             ],
@@ -130,5 +139,10 @@ class CollegeImportTest extends TestCase
         $newUni = College::where('name', 'New Horizon University')->first();
         $this->assertNotNull($newUni);
         $this->assertTrue($newUni->is_university);
+
+        // Verify state field normalization
+        $this->assertEquals('Kerala', $college1->fresh()->state);
+        $this->assertEquals('Maharashtra', $college2->fresh()->state);
+        $this->assertEquals('Tamil Nadu', $college3->fresh()->state);
     }
 }

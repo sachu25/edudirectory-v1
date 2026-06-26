@@ -25,16 +25,21 @@ class ContactImportController extends Controller
             $count = $import->getRowCount();
             $updated = $import->getUpdatedCount();
             $skipped = $import->skippedRows;
+            $failures = $import->failures();
 
             $message = "Contacts processed successfully! {$count} new contacts added, {$updated} existing contacts updated.";
             if (count($skipped) > 0) {
                 $message .= " " . count($skipped) . " rows were skipped.";
-                return back()->with('success', $message)->with('skipped_contacts', $skipped);
             }
-            return back()->with('success', $message);
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            $failures = $e->failures();
-            return back()->with('error', 'Validation Error. Row: ' . $failures[0]->row() . ' - ' . $failures[0]->errors()[0]);
+
+            $response = back()->with('success', $message);
+            if (count($skipped) > 0) {
+                $response->with('skipped_contacts', $skipped);
+            }
+            if ($failures->isNotEmpty()) {
+                $response->with('import_failures', $failures);
+            }
+            return $response;
         } catch (\Exception $e) {
             return back()->with('error', 'Error importing file: ' . $e->getMessage());
         }

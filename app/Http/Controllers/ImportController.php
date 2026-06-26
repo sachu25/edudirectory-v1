@@ -27,10 +27,13 @@ class ImportController extends Controller
             Excel::import($import, $request->file('import_file'));
             $count = $import->getRowCount();
             $updated = $import->getUpdatedCount();
-            return back()->with('success', "Colleges imported successfully! {$count} new records added, {$updated} existing records updated.");
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            $failures = $e->failures();
-            return back()->with('error', 'Validation Error. Row: ' . $failures[0]->row() . ' - ' . $failures[0]->errors()[0]);
+            $failures = $import->failures();
+
+            $message = "Colleges imported successfully! {$count} new records added, {$updated} existing records updated.";
+            if ($failures->isNotEmpty()) {
+                return back()->with('success', $message)->with('import_failures', $failures);
+            }
+            return back()->with('success', $message);
         } catch (\Exception $e) {
             return back()->with('error', 'Error importing file: ' . $e->getMessage());
         }
@@ -48,16 +51,21 @@ class ImportController extends Controller
             $count = $import->getRowCount();
             $updated = $import->getUpdatedCount();
             $skipped = $import->skippedRows;
+            $failures = $import->failures();
 
             $message = "Unified import processed successfully! {$count} new contact records added, {$updated} existing contact records updated.";
             if (count($skipped) > 0) {
                 $message .= " " . count($skipped) . " rows were skipped.";
-                return back()->with('success', $message)->with('skipped_contacts', $skipped);
             }
-            return back()->with('success', $message);
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            $failures = $e->failures();
-            return back()->with('error', 'Validation Error. Row: ' . $failures[0]->row() . ' - ' . $failures[0]->errors()[0]);
+
+            $response = back()->with('success', $message);
+            if (count($skipped) > 0) {
+                $response->with('skipped_contacts', $skipped);
+            }
+            if ($failures->isNotEmpty()) {
+                $response->with('import_failures', $failures);
+            }
+            return $response;
         } catch (\Exception $e) {
             return back()->with('error', 'Error importing file: ' . $e->getMessage());
         }

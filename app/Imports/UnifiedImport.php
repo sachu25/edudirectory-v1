@@ -10,9 +10,13 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
 
-class UnifiedImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmptyRows
+class UnifiedImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmptyRows, SkipsOnFailure
 {
+    use SkipsFailures;
+
     private $rowsCount = 0;
     private $updatedCount = 0;
     
@@ -146,6 +150,7 @@ class UnifiedImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
         $affiliatedUniversity = isset($row['affiliated_university']) ? trim($row['affiliated_university']) : '';
                         
         $collegeName = isset($row['college_name']) ? trim($row['college_name']) : '';
+        $state = isset($row['state']) ? College::sanitizeState($row['state']) : '';
         if (empty($collegeName)) {
             $this->skippedRows[] = [
                 'row' => $this->currentRowIndex,
@@ -184,6 +189,7 @@ class UnifiedImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
                 'type' => $college->type ?: $type,
                 'university_id' => $universityId ?: $college->university_id,
                 'is_university' => $college->is_university || $isUniversity,
+                'state' => $college->state ?: $state,
             ]);
         } else {
             $college = College::create([
@@ -191,6 +197,7 @@ class UnifiedImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
                 'is_university'         => $isUniversity,
                 'type'                  => $type,
                 'university_id'         => $universityId,
+                'state'                 => $state,
                 'status'                => 'active',
             ]);
 
@@ -298,6 +305,7 @@ class UnifiedImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
     {
         return [
             'college_name' => 'required|string',
+            'state' => 'required|string',
             'type' => 'nullable|string',
             'affiliated_university' => 'nullable|string',
             'contact_name' => 'required|string',

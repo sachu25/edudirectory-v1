@@ -26,10 +26,14 @@ class ReportController extends Controller
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
+        if ($request->filled('state')) {
+            $query->where('state', $request->state);
+        }
 
         $colleges = $query->paginate(20)->withQueryString();
+        $states = College::$states;
 
-        return view('reports.index', compact('colleges', 'universities'));
+        return view('reports.index', compact('colleges', 'universities', 'states'));
     }
 
     public function exportExcel(Request $request)
@@ -54,6 +58,9 @@ class ReportController extends Controller
         }
         if ($request->filled('status')) {
             $query->where('status', $request->status);
+        }
+        if ($request->filled('state')) {
+            $query->where('state', $request->state);
         }
 
         $colleges = $query->get();

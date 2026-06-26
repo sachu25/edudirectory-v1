@@ -25,6 +25,9 @@ class CollegeController extends Controller
             if ($request->filled('university_id')) {
                 $data->where('university_id', $request->university_id);
             }
+            if ($request->filled('state')) {
+                $data->where('state', $request->state);
+            }
 
             return Datatables::of($data)
                     ->addIndexColumn()
@@ -49,7 +52,8 @@ class CollegeController extends Controller
         }
         
         $universities = University::where('status', 'active')->orderBy('name')->get();
-        return view('colleges.index', compact('universities'));
+        $states = College::$states;
+        return view('colleges.index', compact('universities', 'states'));
     }
 
     public function store(Request $request)
@@ -61,6 +65,7 @@ class CollegeController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
             'code' => [
                 'nullable', 
                 'string', 
@@ -77,6 +82,9 @@ class CollegeController extends Controller
         ]);
 
         $data = $request->except(['_token', 'college_id']);
+        if (isset($data['state'])) {
+            $data['state'] = College::sanitizeState($data['state']);
+        }
         $data['is_university'] = $request->has('is_university') ? 1 : 0;
         $data['hostel_facility'] = $request->has('hostel_facility') ? 1 : 0;
         $data['placement_cell'] = $request->has('placement_cell') ? 1 : 0;

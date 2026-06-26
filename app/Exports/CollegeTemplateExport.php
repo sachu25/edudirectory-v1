@@ -18,6 +18,7 @@ class CollegeTemplateExport implements FromArray, WithHeadings, WithEvents
         return [
             [
                 'Example College of Technology',
+                'Kerala',
                 'Autonomous',
                 'APJ Abdul Kalam Technological University'
             ]
@@ -31,6 +32,7 @@ class CollegeTemplateExport implements FromArray, WithHeadings, WithEvents
     {
         return [
             'college_name',
+            'state',
             'type',
             'affiliated_university'
         ];
@@ -63,8 +65,8 @@ class CollegeTemplateExport implements FromArray, WithHeadings, WithEvents
                 $typeValidationRange = 'ValidationLists!$A$1:$A$' . count($types);
 
                 for ($row = 2; $row <= 150; $row++) {
-                    // Type validation dropdown (Column B)
-                    $typeValidation = $sheet->getCell('B' . $row)->getDataValidation();
+                    // Type validation dropdown (Column C)
+                    $typeValidation = $sheet->getCell('C' . $row)->getDataValidation();
                     $typeValidation->setType(DataValidation::TYPE_LIST);
                     $typeValidation->setErrorStyle(DataValidation::STYLE_STOP);
                     $typeValidation->setAllowBlank(true);

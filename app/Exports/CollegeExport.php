@@ -30,6 +30,9 @@ class CollegeExport implements FromCollection, WithHeadings, WithMapping
         if ($this->request->filled('status')) {
             $query->where('status', $this->request->status);
         }
+        if ($this->request->filled('state')) {
+            $query->where('state', $this->request->state);
+        }
 
         return $query->get();
     }

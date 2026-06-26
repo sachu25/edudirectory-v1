@@ -8,9 +8,13 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use App\Models\University;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
 
-class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmptyRows
+class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmptyRows, SkipsOnFailure
 {
+    use SkipsFailures;
+
     private $rowsCount = 0;
     private $updatedCount = 0;
     private $collegesCache = null;
@@ -139,6 +143,7 @@ class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
         $affiliatedUniversity = isset($row['affiliated_university']) ? trim($row['affiliated_university']) : '';
                         
         $collegeName = isset($row['college_name']) ? trim($row['college_name']) : '';
+        $state = isset($row['state']) ? College::sanitizeState($row['state']) : '';
         $normInput = $this->normalizeCollegeName($collegeName);
 
         $type = isset($row['type']) ? trim($row['type']) : '';
@@ -168,6 +173,7 @@ class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
                 'type' => $existingCollege->type ?: $type,
                 'university_id' => $universityId ?: $existingCollege->university_id,
                 'is_university' => $existingCollege->is_university || $isUniversity,
+                'state' => $existingCollege->state ?: $state,
             ]);
             $this->updatedCount++;
             return null;
@@ -178,6 +184,7 @@ class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
             'is_university'         => $isUniversity,
             'type'                  => $type,
             'university_id'         => $universityId,
+            'state'                 => $state,
             'status'                => 'active',
         ]);
 
@@ -213,6 +220,7 @@ class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
     {
         return [
             'college_name' => 'required|string',
+            'state' => 'required|string',
             'type' => 'nullable|string',
             'affiliated_university' => 'nullable|string',
         ];

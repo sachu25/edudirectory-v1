@@ -11,6 +11,59 @@ class College extends Model
 {
     use HasFactory, SoftDeletes, Auditable;
 
+    public static $states = [
+        'Andaman and Nicobar Islands',
+        'Andhra Pradesh',
+        'Arunachal Pradesh',
+        'Assam',
+        'Bihar',
+        'Chandigarh',
+        'Chhattisgarh',
+        'Dadra and Nagar Haveli and Daman and Diu',
+        'Delhi',
+        'Goa',
+        'Gujarat',
+        'Haryana',
+        'Himachal Pradesh',
+        'Jammu and Kashmir',
+        'Jharkhand',
+        'Karnataka',
+        'Kerala',
+        'Ladakh',
+        'Lakshadweep',
+        'Madhya Pradesh',
+        'Maharashtra',
+        'Manipur',
+        'Meghalaya',
+        'Mizoram',
+        'Nagaland',
+        'Odisha',
+        'Puducherry',
+        'Punjab',
+        'Rajasthan',
+        'Sikkim',
+        'Tamil Nadu',
+        'Telangana',
+        'Tripura',
+        'Uttar Pradesh',
+        'Uttarakhand',
+        'West Bengal'
+    ];
+
+    public static function sanitizeState(string $stateName): string
+    {
+        $cleanInput = preg_replace('/[^a-z0-9]/', '', strtolower(trim($stateName)));
+        
+        foreach (self::$states as $stdState) {
+            $cleanStd = preg_replace('/[^a-z0-9]/', '', strtolower($stdState));
+            if ($cleanInput === $cleanStd) {
+                return $stdState;
+            }
+        }
+        
+        return ucwords(trim($stateName));
+    }
+
     protected $fillable = [
         'name', 'is_university', 'university_id', 'code', 'type', 'naac_grade', 
         'nirf_ranking', 'established_year', 'website', 'address', 

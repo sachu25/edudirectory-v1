@@ -3,6 +3,39 @@
         Institution Master
     </x-slot>
 
+    @if (session('import_failures'))
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-danger text-white py-3 d-flex align-items-center">
+                <i class="fas fa-exclamation-triangle me-2 fs-5"></i>
+                <h6 class="mb-0 fw-bold">Import Validation Failures Summary</h6>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped align-middle mb-0 small">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="ps-3" style="width: 100px;">Excel Row</th>
+                                <th>Column/Field</th>
+                                <th>Error Message</th>
+                                <th>Value Entered</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (session('import_failures') as $failure)
+                                <tr>
+                                    <td class="fw-bold text-muted ps-3">Row {{ $failure->row() }}</td>
+                                    <td class="fw-semibold text-danger">{{ $failure->attribute() }}</td>
+                                    <td>{{ $failure->errors()[0] }}</td>
+                                    <td><code class="bg-light p-1 rounded text-dark">{{ is_array($failure->values()[$failure->attribute()] ?? '') ? json_encode($failure->values()[$failure->attribute()]) : ($failure->values()[$failure->attribute()] ?? 'N/A') }}</code></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center py-3">
             <h6 class="mb-0 fw-bold">Manage Institutions</h6>
@@ -20,7 +53,7 @@
         <div class="card-body">
             <!-- Filter Options -->
             <div class="row mb-4 align-items-end g-3">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="filter_type" class="form-label fw-semibold text-muted small text-uppercase">Filter by Type</label>
                     <select class="form-select select2-filter" id="filter_type">
                         <option value="">All Types</option>
@@ -31,7 +64,7 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="filter_is_university" class="form-label fw-semibold text-muted small text-uppercase">Filter by Category</label>
                     <select class="form-select select2-filter" id="filter_is_university">
                         <option value="">All Categories</option>
@@ -48,7 +81,16 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-3 col-lg-2">
+                <div class="col-md-3">
+                    <label for="filter_state" class="form-label fw-semibold text-muted small text-uppercase">Filter by State</label>
+                    <select class="form-select select2-filter" id="filter_state">
+                        <option value="">All States</option>
+                        @foreach($states as $st)
+                            <option value="{{ $st }}">{{ $st }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
                     <button class="btn btn-outline-secondary w-100 py-2" id="resetFilterBtn">
                         <i class="fas fa-undo me-1"></i> Reset
                     </button>
@@ -66,7 +108,7 @@
                             <th>Category</th>
                             <th>Affiliated University</th>
                             <th>Type</th>
-                            <th>District</th>
+                            <th>State</th>
                             <th width="120px">Action</th>
                         </tr>
                     </thead>
@@ -113,6 +155,7 @@
                             <div class="bg-light p-3 rounded border small text-muted">
                                 <ul class="list-unstyled mb-0">
                                     <li><i class="fas fa-check-circle text-success me-1"></i> <code>college_name</code> <span class="text-danger">*</span></li>
+                                    <li><i class="fas fa-check-circle text-success me-1"></i> <code>state</code> <span class="text-danger">*</span></li>
                                     <li><i class="fas fa-check-circle text-success me-1"></i> <code>type</code></li>
                                     <li><i class="fas fa-check-circle text-success me-1"></i> <code>affiliated_university</code></li>
                                 </ul>
@@ -231,8 +274,13 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label for="state" class="form-label fw-semibold">State</label>
-                                <input type="text" class="form-control" id="state" name="state">
+                                <label for="state" class="form-label fw-semibold">State <span class="text-danger">*</span></label>
+                                <select class="form-select" id="state" name="state" required>
+                                    <option value="">Select State</option>
+                                    @foreach($states as $st)
+                                        <option value="{{ $st }}">{{ $st }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                             <div class="col-md-3">
@@ -317,6 +365,7 @@
                         d.type = $('#filter_type').val();
                         d.is_university = $('#filter_is_university').val();
                         d.university_id = $('#filter_university_id').val();
+                        d.state = $('#filter_state').val();
                     }
                 },
                 columns: [
@@ -328,7 +377,7 @@
                     }},
                     {data: 'affiliated_university', name: 'affiliated_university'},
                     {data: 'type', name: 'type'},
-                    {data: 'district', name: 'district'},
+                    {data: 'state', name: 'state'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ],
                 language: {
@@ -340,7 +389,7 @@
             });
             
             // Redraw table when filters change
-            $('#filter_type, #filter_is_university, #filter_university_id').on('change', function() {
+            $('#filter_type, #filter_is_university, #filter_university_id, #filter_state').on('change', function() {
                 table.draw();
             });
 
@@ -349,6 +398,7 @@
                 $('#filter_type').val(null).trigger('change');
                 $('#filter_is_university').val(null).trigger('change');
                 $('#filter_university_id').val(null).trigger('change');
+                $('#filter_state').val(null).trigger('change');
             });
             
             $('#createNewCollege').click(function () {

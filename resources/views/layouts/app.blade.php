@@ -59,18 +59,22 @@
             }
             .sidebar .nav-link {
                 color: rgba(255, 255, 255, 0.65);
-                padding: 12px 20px;
+                padding: 10px 16px;
                 border-radius: 8px;
                 margin: 4px 16px;
                 font-weight: 500;
                 font-size: 0.9rem;
                 display: flex;
                 align-items: center;
+                gap: 10px;
+                line-height: 1.3;
                 transition: all 0.2s ease-in-out;
             }
             .sidebar .nav-link i {
                 font-size: 1.1rem;
-                width: 28px;
+                width: 20px;
+                text-align: center;
+                flex-shrink: 0;
                 transition: transform 0.2s ease;
             }
             .sidebar .nav-link:hover {
@@ -200,6 +204,16 @@
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('colleges.*') ? 'active' : '' }}" href="{{ route('colleges.index') }}">
                                 <i class="fas fa-graduation-cap"></i> Institutions
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('non-academic-clients.*') ? 'active' : '' }}" href="{{ route('non-academic-clients.index') }}">
+                                <i class="fas fa-building"></i> Non-Academic Clients
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('non-academic-interactions.*') ? 'active' : '' }}" href="{{ route('non-academic-interactions.index') }}">
+                                <i class="fas fa-handshake"></i> Non-Academic Interactions
                             </a>
                         </li>
                         <li class="nav-item">

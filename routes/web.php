@@ -4,6 +4,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UniversityController;
 use App\Http\Controllers\CollegeController;
+use App\Http\Controllers\NonAcademicClientController;
+use App\Http\Controllers\NonAcademicInteractionController;
 use App\Http\Controllers\ContactPersonController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ImportController;
@@ -24,6 +26,8 @@ Route::middleware(['auth', 'role'])->group(function () {
     Route::resource('universities', UniversityController::class);
     Route::get('colleges/download-template', [CollegeController::class, 'downloadTemplate'])->name('colleges.download-template');
     Route::resource('colleges', CollegeController::class);
+    Route::resource('non-academic-clients', NonAcademicClientController::class);
+    Route::resource('non-academic-interactions', NonAcademicInteractionController::class);
     Route::resource('designations', \App\Http\Controllers\DesignationController::class);
     Route::get('contacts/download-template', [\App\Http\Controllers\ContactImportController::class, 'downloadTemplate'])->name('contacts.download-template');
     Route::post('contacts/import', [\App\Http\Controllers\ContactImportController::class, 'store'])->name('contacts.import');
