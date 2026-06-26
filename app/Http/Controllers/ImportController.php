@@ -31,11 +31,11 @@ class ImportController extends Controller
 
             $message = "Colleges imported successfully! {$count} new records added, {$updated} existing records updated.";
             if ($failures->isNotEmpty()) {
-                return back()->with('success', $message)->with('import_failures', $failures);
+                return redirect()->route('imports.index')->with('success', $message)->with('import_failures', $failures);
             }
-            return back()->with('success', $message);
+            return redirect()->route('imports.index')->with('success', $message);
         } catch (\Exception $e) {
-            return back()->with('error', 'Error importing file: ' . $e->getMessage());
+            return redirect()->route('imports.index')->with('error', 'Error importing file: ' . $e->getMessage());
         }
     }
 
@@ -58,7 +58,7 @@ class ImportController extends Controller
                 $message .= " " . count($skipped) . " rows were skipped.";
             }
 
-            $response = back()->with('success', $message);
+            $response = redirect()->route('imports.index')->with('success', $message);
             if (count($skipped) > 0) {
                 $response->with('skipped_contacts', $skipped);
             }
@@ -67,7 +67,7 @@ class ImportController extends Controller
             }
             return $response;
         } catch (\Exception $e) {
-            return back()->with('error', 'Error importing file: ' . $e->getMessage());
+            return redirect()->route('imports.index')->with('error', 'Error importing file: ' . $e->getMessage());
         }
     }
 

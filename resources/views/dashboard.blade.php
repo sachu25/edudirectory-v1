@@ -27,7 +27,7 @@
     </div>
 
     <div class="row g-4 mb-4">
-        <div class="col-12 col-sm-6 col-xl-4">
+        <div class="col-12 col-sm-6 col-xl-3">
             <div class="card h-100 position-relative overflow-hidden" style="border-left: 4px solid var(--primary-color);">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -42,7 +42,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-xl-4">
+        <div class="col-12 col-sm-6 col-xl-3">
             <div class="card h-100 position-relative overflow-hidden" style="border-left: 4px solid var(--secondary-color);">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-xl-4">
+        <div class="col-12 col-sm-6 col-xl-3">
             <div class="card h-100 position-relative overflow-hidden" style="border-left: 4px solid #06B6D4;">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -73,12 +73,12 @@
             </div>
         </div>
         
-        <div class="col-12 col-sm-6 col-xl-4">
+        <div class="col-12 col-sm-6 col-xl-3">
             <div class="card h-100 position-relative overflow-hidden" style="border-left: 4px solid #10B981;">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Autonomous Institutions</h6>
+                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Autonomous Inst.</h6>
                             <h3 class="mb-0 fw-bold text-dark">{{ $autonomousColleges }}</h3>
                         </div>
                         <div class="p-3 rounded-circle" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">
@@ -88,12 +88,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-xl-4">
+        <div class="col-12 col-sm-6 col-xl-3">
             <div class="card h-100 position-relative overflow-hidden" style="border-left: 4px solid #F59E0B;">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Affiliated Institutions</h6>
+                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Affiliated Inst.</h6>
                             <h3 class="mb-0 fw-bold text-dark">{{ $affiliatedColleges }}</h3>
                         </div>
                         <div class="p-3 rounded-circle" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B;">
@@ -103,16 +103,47 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-xl-4">
+        <div class="col-12 col-sm-6 col-xl-3">
             <div class="card h-100 position-relative overflow-hidden" style="border-left: 4px solid #8B5CF6;">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Institutions Added This Month</h6>
+                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Inst. Added This Month</h6>
                             <h3 class="mb-0 fw-bold text-dark">{{ $addedThisMonth }}</h3>
                         </div>
                         <div class="p-3 rounded-circle" style="background: rgba(139, 92, 246, 0.1); color: #8B5CF6;">
                             <i class="fas fa-calendar-plus fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card h-100 position-relative overflow-hidden" style="border-left: 4px solid #6366F1;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Non-Academic Clients</h6>
+                            <h3 class="mb-0 fw-bold text-dark">{{ $totalNonAcademicClients }}</h3>
+                        </div>
+                        <div class="p-3 rounded-circle" style="background: rgba(99, 102, 241, 0.1); color: #6366F1;">
+                            <i class="fas fa-building fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card h-100 position-relative overflow-hidden" style="border-left: 4px solid #F43F5E;">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted fw-normal mb-2 text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Non-Acad. Interactions</h6>
+                            <h3 class="mb-0 fw-bold text-dark">{{ $totalNonAcademicInteractions }}</h3>
+                        </div>
+                        <div class="p-3 rounded-circle" style="background: rgba(244, 63, 94, 0.1); color: #F43F5E;">
+                            <i class="fas fa-handshake fa-lg"></i>
                         </div>
                     </div>
                 </div>
@@ -135,7 +166,7 @@
                                     <th class="ps-4 py-3">Institution Name</th>
                                     <th class="py-3">Affiliated University</th>
                                     <th class="py-3">Type</th>
-                                    <th class="py-3">City/District</th>
+                                    <th class="py-3">State</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -156,7 +187,7 @@
                                     </td>
                                     <td class="text-muted">
                                         <i class="fas fa-map-marker-alt me-1 text-danger opacity-75"></i> 
-                                        {{ $college->district ?? 'N/A' }}
+                                        {{ $college->state ?? 'N/A' }}
                                     </td>
                                 </tr>
                                 @empty

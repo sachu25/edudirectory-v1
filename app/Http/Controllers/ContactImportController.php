@@ -12,7 +12,7 @@ class ContactImportController extends Controller
     public function store(Request $request)
     {
         if (!auth()->user()->hasPermission('contacts.create')) {
-            return back()->with('error', 'Unauthorized action.');
+            return redirect()->route('imports.index')->with('error', 'Unauthorized action.');
         }
 
         $request->validate([
@@ -32,7 +32,7 @@ class ContactImportController extends Controller
                 $message .= " " . count($skipped) . " rows were skipped.";
             }
 
-            $response = back()->with('success', $message);
+            $response = redirect()->route('imports.index')->with('success', $message);
             if (count($skipped) > 0) {
                 $response->with('skipped_contacts', $skipped);
             }
@@ -41,7 +41,7 @@ class ContactImportController extends Controller
             }
             return $response;
         } catch (\Exception $e) {
-            return back()->with('error', 'Error importing file: ' . $e->getMessage());
+            return redirect()->route('imports.index')->with('error', 'Error importing file: ' . $e->getMessage());
         }
     }
 

@@ -35,13 +35,15 @@
             <x-primary-button>{{ __('Save') }}</x-primary-button>
 
             @if (session('status') === 'password-updated')
-                <p
+                <span
                     x-data="{ show: true }"
                     x-show="show"
                     x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600"
-                >{{ __('Saved.') }}</p>
+                    x-init="setTimeout(() => show = false, 4000)"
+                    class="text-success fw-semibold small d-inline-flex align-items-center ms-2"
+                >
+                    <i class="fas fa-check-circle me-1"></i> {{ __('Password updated successfully.') }}
+                </span>
             @endif
         </div>
     </form>

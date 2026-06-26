@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\College;
 use App\Models\ContactPerson;
 use App\Models\Interaction;
+use App\Models\NonAcademicClient;
+use App\Models\NonAcademicInteraction;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -21,6 +23,9 @@ class DashboardController extends Controller
         $addedThisMonth = College::whereMonth('created_at', Carbon::now()->month)
                                  ->whereYear('created_at', Carbon::now()->year)
                                  ->count();
+        
+        $totalNonAcademicClients = NonAcademicClient::count();
+        $totalNonAcademicInteractions = NonAcademicInteraction::count();
 
         // Chart Data (Widgets)
         $interactedCount = College::has('interactions')->count();
@@ -51,6 +56,7 @@ class DashboardController extends Controller
         return view('dashboard', compact(
             'totalColleges', 'totalUniversities', 'totalContacts', 
             'autonomousColleges', 'affiliatedColleges', 'addedThisMonth',
+            'totalNonAcademicClients', 'totalNonAcademicInteractions',
             'collegeInteractionStats', 'universityWiseCount', 'districtWiseCount', 'recentColleges'
         ));
     }
