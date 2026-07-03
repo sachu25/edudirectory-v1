@@ -18,8 +18,26 @@ class ContactPersonController extends Controller
                 $data->where('college_id', $request->college_id);
             }
 
+            if ($request->filled('designation_id')) {
+                $data->where('designation_id', $request->designation_id);
+            }
+
             return Datatables::of($data)
                     ->addIndexColumn()
+                    ->orderColumn('college', function ($query, $order) {
+                        $query->orderBy(
+                            \App\Models\College::select('name')
+                                ->whereColumn('colleges.id', 'contact_persons.college_id'),
+                            $order
+                        );
+                    })
+                    ->orderColumn('designation', function ($query, $order) {
+                        $query->orderBy(
+                            \App\Models\Designation::select('name')
+                                ->whereColumn('designations.id', 'contact_persons.designation_id'),
+                            $order
+                        );
+                    })
                     ->addColumn('college', function($row){
                         return $row->college ? $row->college->name : 'N/A';
                     })
@@ -105,5 +123,14 @@ class ContactPersonController extends Controller
         
         ContactPerson::find($id)->delete();
         return response()->json(['success' => 'Contact Person deleted successfully.']);
+    }
+
+    public function export(Request $request)
+    {
+        if (!auth()->user()->hasPermission('contacts.view')) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\ContactExport($request), 'contacts_export.xlsx');
     }
 }

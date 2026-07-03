@@ -7,6 +7,11 @@
         <div class="card-header d-flex justify-content-between align-items-center py-3">
             <h6 class="mb-0 fw-bold">Manage Contacts</h6>
             <div class="d-flex gap-2">
+                @can('contacts.view')
+                <a href="#" class="btn btn-outline-success btn-sm" id="btnExportExcel">
+                    <i class="fas fa-file-excel"></i> Export Excel
+                </a>
+                @endcan
                 @can('contacts.create')
                 <button class="btn btn-outline-primary btn-sm" id="btnBulkImport">
                     <i class="fas fa-file-upload"></i> Bulk Import
@@ -47,12 +52,21 @@
 
             <!-- Filter Options -->
             <div class="row mb-4 align-items-end g-3">
-                <div class="col-md-6 col-lg-4">
+                <div class="col-md-5 col-lg-4">
                     <label for="filter_college_id" class="form-label fw-semibold text-muted small text-uppercase">Filter by Institution</label>
-                    <select class="form-select select2-filter" id="filter_college_id">
+                    <select class="form-select select2-filter" id="filter_college_id" data-placeholder="All Institutions">
                         <option value="">All Institutions</option>
                         @foreach($colleges as $college)
                             <option value="{{ $college->id }}">{{ $college->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4 col-lg-4">
+                    <label for="filter_designation_id" class="form-label fw-semibold text-muted small text-uppercase">Filter by Designation</label>
+                    <select class="form-select select2-filter" id="filter_designation_id" data-placeholder="All Designations">
+                        <option value="">All Designations</option>
+                        @foreach($designations as $designation)
+                            <option value="{{ $designation->id }}">{{ $designation->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -226,10 +240,12 @@
         $(function () {
             
             // Initialize Select2 filter
-            $('.select2-filter').select2({
-                theme: 'bootstrap-5',
-                placeholder: 'All Institutions',
-                allowClear: true
+            $('.select2-filter').each(function() {
+                $(this).select2({
+                    theme: 'bootstrap-5',
+                    placeholder: $(this).data('placeholder') || 'Select Option',
+                    allowClear: true
+                });
             });
 
             // Initialize Select2 inside create/edit modal
@@ -251,6 +267,7 @@
                     url: "{{ route('contacts.index') }}",
                     data: function (d) {
                         d.college_id = $('#filter_college_id').val();
+                        d.designation_id = $('#filter_designation_id').val();
                     }
                 },
                 columns: [
@@ -272,13 +289,43 @@
             });
             
             // Redraw table when filter changes
-            $('#filter_college_id').on('change', function() {
+            $('#filter_college_id, #filter_designation_id').on('change', function() {
                 table.draw();
             });
 
             // Reset filter and redraw
             $('#resetFilterBtn').click(function() {
                 $('#filter_college_id').val(null).trigger('change');
+                $('#filter_designation_id').val(null).trigger('change');
+            });
+
+            // Export Excel
+            $('#btnExportExcel').click(function(e) {
+                e.preventDefault();
+                
+                var collegeId = $('#filter_college_id').val() || '';
+                var designationId = $('#filter_designation_id').val() || '';
+                
+                var order = table.order();
+                var sortColIndex = order[0] ? order[0][0] : '';
+                var sortDir = order[0] ? order[0][1] : '';
+                
+                var sortColumn = '';
+                if (sortColIndex !== '') {
+                    sortColumn = table.settings().init().columns[sortColIndex].name || '';
+                }
+                
+                var search = table.search() || '';
+                
+                var exportUrl = "{{ route('contacts.export') }}?" + $.param({
+                    college_id: collegeId,
+                    designation_id: designationId,
+                    search: search,
+                    sort_column: sortColumn,
+                    sort_direction: sortDir
+                });
+                
+                window.location.href = exportUrl;
             });
             
             $('#btnBulkImport').click(function () {

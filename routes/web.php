@@ -31,6 +31,7 @@ Route::middleware(['auth', 'role'])->group(function () {
     Route::resource('designations', \App\Http\Controllers\DesignationController::class);
     Route::get('contacts/download-template', [\App\Http\Controllers\ContactImportController::class, 'downloadTemplate'])->name('contacts.download-template');
     Route::post('contacts/import', [\App\Http\Controllers\ContactImportController::class, 'store'])->name('contacts.import');
+    Route::get('contacts/export', [ContactPersonController::class, 'export'])->name('contacts.export');
     Route::resource('contacts', ContactPersonController::class);
     
     // Interactions Module
