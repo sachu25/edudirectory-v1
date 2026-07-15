@@ -293,15 +293,7 @@
                                 <input type="text" class="form-control" id="country" name="country" value="India">
                             </div>
 
-                            <div class="col-md-6">
-                                <label for="faculty_strength" class="form-label fw-semibold">Faculty Strength</label>
-                                <input type="number" class="form-control" id="faculty_strength" name="faculty_strength">
-                            </div>
 
-                            <div class="col-md-6">
-                                <label for="courses_offered" class="form-label fw-semibold">Courses Offered (Comma separated)</label>
-                                <input type="text" class="form-control" id="courses_offered" name="courses_offered" placeholder="e.g. B.Tech, M.Tech, MBA">
-                            </div>
 
                             <div class="col-md-6">
                                 <label for="status" class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
@@ -311,16 +303,15 @@
                                 </select>
                             </div>
 
-                            <div class="col-md-12">
-                                <div class="form-check form-check-inline mt-2">
-                                    <input class="form-check-input" type="checkbox" id="hostel_facility" name="hostel_facility" value="1">
-                                    <label class="form-check-label fw-semibold" for="hostel_facility">Hostel Facility Available</label>
-                                </div>
-                                <div class="form-check form-check-inline mt-2">
-                                    <input class="form-check-input" type="checkbox" id="placement_cell" name="placement_cell" value="1">
-                                    <label class="form-check-label fw-semibold" for="placement_cell">Placement Cell Available</label>
-                                </div>
+                            <div class="col-md-6">
+                                <label for="fdp_client" class="form-label fw-semibold">FDP Client?</label>
+                                <select class="form-select" id="fdp_client" name="fdp_client">
+                                    <option value="No">No</option>
+                                    <option value="Yes">Yes</option>
+                                </select>
                             </div>
+
+
 
                             <div class="col-md-12">
                                 <label for="remarks" class="form-label fw-semibold">Remarks</label>
@@ -406,6 +397,7 @@
                 $('#college_id').val('');
                 $('#collegeForm').trigger("reset");
                 $('#is_university').prop('checked', false);
+                $('#fdp_client').val('No');
                 $('#modelHeading').html("Create New Institution");
                 $('#ajaxModel').modal('show');
             });
@@ -427,6 +419,7 @@
                     $('#type').val(data.type);
                     $('#university_id').val(data.university_id);
                     $('#status').val(data.status || 'active');
+                    $('#fdp_client').val(data.fdp_client || 'No');
                     $('#naac_grade').val(data.naac_grade);
                     $('#nirf_ranking').val(data.nirf_ranking);
                     $('#established_year').val(data.established_year);
@@ -440,26 +433,12 @@
                     $('#office_mobile').val(data.office_mobile);
                     $('#official_email').val(data.official_email);
                     $('#student_strength').val(data.student_strength);
-                    $('#faculty_strength').val(data.faculty_strength);
-                    $('#courses_offered').val(data.courses_offered);
                     $('#remarks').val(data.remarks);
                     
                     if(data.is_university) {
                         $('#is_university').prop('checked', true);
                     } else {
                         $('#is_university').prop('checked', false);
-                    }
-
-                    if(data.hostel_facility) {
-                        $('#hostel_facility').prop('checked', true);
-                    } else {
-                        $('#hostel_facility').prop('checked', false);
-                    }
-                    
-                    if(data.placement_cell) {
-                        $('#placement_cell').prop('checked', true);
-                    } else {
-                        $('#placement_cell').prop('checked', false);
                     }
                 })
             });

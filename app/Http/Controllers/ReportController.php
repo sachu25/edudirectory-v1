@@ -29,6 +29,9 @@ class ReportController extends Controller
         if ($request->filled('state')) {
             $query->where('state', $request->state);
         }
+        if ($request->filled('fdp_client')) {
+            $query->where('fdp_client', $request->fdp_client);
+        }
 
         $colleges = $query->paginate(20)->withQueryString();
         $states = College::$states;
@@ -61,6 +64,9 @@ class ReportController extends Controller
         }
         if ($request->filled('state')) {
             $query->where('state', $request->state);
+        }
+        if ($request->filled('fdp_client')) {
+            $query->where('fdp_client', $request->fdp_client);
         }
 
         $colleges = $query->get();

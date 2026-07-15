@@ -44,6 +44,14 @@
                         <div class="col-sm-8">{{ $college->established_year ?? 'N/A' }}</div>
                     </div>
                     <div class="row mb-3">
+                        <div class="col-sm-4 text-muted">FDP Client?</div>
+                        <div class="col-sm-8">
+                            <span class="badge {{ $college->fdp_client == 'Yes' ? 'bg-success' : 'bg-secondary' }}">
+                                {{ $college->fdp_client ?? 'No' }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-sm-4 text-muted">Remarks</div>
                         <div class="col-sm-8">{{ $college->remarks ?? 'N/A' }}</div>
                     </div>

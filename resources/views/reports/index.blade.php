@@ -32,7 +32,7 @@
                             <option value="Other" {{ request('type') == 'Other' ? 'selected' : '' }}>Other</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label for="state" class="form-label fw-semibold">State</label>
                         <select name="state" id="state" class="form-select">
                             <option value="">All States</option>
@@ -41,12 +41,20 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         <label for="status" class="form-label fw-semibold">Status</label>
                         <select name="status" id="status" class="form-select">
-                            <option value="">All Status</option>
+                            <option value="">All</option>
                             <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
                             <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="fdp_client" class="form-label fw-semibold">FDP Client?</label>
+                        <select name="fdp_client" id="fdp_client" class="form-select">
+                            <option value="">All</option>
+                            <option value="Yes" {{ request('fdp_client') == 'Yes' ? 'selected' : '' }}>Yes</option>
+                            <option value="No" {{ request('fdp_client') == 'No' ? 'selected' : '' }}>No</option>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -85,6 +93,7 @@
                             <th>Institution Name</th>
                             <th>Affiliated University</th>
                             <th>Type</th>
+                            <th>FDP Client?</th>
                             <th>Official Email</th>
                             <th>Website</th>
                             <th>Status</th>
@@ -97,6 +106,11 @@
                             <td class="fw-medium">{{ $college->name }}</td>
                             <td>{{ $college->university ? $college->university->name : 'N/A' }}</td>
                             <td>{{ $college->type }}</td>
+                            <td>
+                                <span class="badge {{ $college->fdp_client == 'Yes' ? 'bg-success' : 'bg-secondary' }}">
+                                    {{ $college->fdp_client ?? 'No' }}
+                                </span>
+                            </td>
                             <td>{{ $college->official_email ?? '-' }}</td>
                             <td>
                                 @if($college->website)
@@ -115,7 +129,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="text-center py-4 text-muted">No records found matching the criteria.</td>
+                            <td colspan="8" class="text-center py-4 text-muted">No records found matching the criteria.</td>
                         </tr>
                         @endforelse
                     </tbody>

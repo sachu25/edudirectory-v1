@@ -22,6 +22,7 @@
                 <th>Code</th>
                 <th>University</th>
                 <th>Type</th>
+                <th>FDP Client?</th>
                 <th>State</th>
                 <th>Status</th>
             </tr>
@@ -34,6 +35,7 @@
                 <td>{{ $college->code ?? '-' }}</td>
                 <td>{{ $college->university ? $college->university->name : 'N/A' }}</td>
                 <td>{{ $college->type }}</td>
+                <td>{{ $college->fdp_client ?? 'No' }}</td>
                 <td>{{ $college->state ?? '-' }}</td>
                 <td>{{ ucfirst($college->status) }}</td>
             </tr>

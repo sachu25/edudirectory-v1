@@ -33,6 +33,9 @@ class CollegeExport implements FromCollection, WithHeadings, WithMapping
         if ($this->request->filled('state')) {
             $query->where('state', $this->request->state);
         }
+        if ($this->request->filled('fdp_client')) {
+            $query->where('fdp_client', $this->request->fdp_client);
+        }
 
         return $query->get();
     }
@@ -58,6 +61,7 @@ class CollegeExport implements FromCollection, WithHeadings, WithMapping
             'District',
             'State',
             'Status',
+            'FDP Client',
             'Created At'
         ];
     }
@@ -83,6 +87,7 @@ class CollegeExport implements FromCollection, WithHeadings, WithMapping
             $college->district,
             $college->state,
             ucfirst($college->status),
+            $college->fdp_client ?? 'No',
             $college->created_at->format('Y-m-d')
         ];
     }

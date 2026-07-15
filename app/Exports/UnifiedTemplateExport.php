@@ -25,7 +25,8 @@ class UnifiedTemplateExport implements FromArray, WithHeadings, WithEvents
                 'Principal',
                 'Computer Science',
                 '9876543210',
-                'johndoe@example.com'
+                'johndoe@example.com',
+                'No'
             ]
         ];
     }
@@ -44,7 +45,8 @@ class UnifiedTemplateExport implements FromArray, WithHeadings, WithEvents
             'designation',
             'department',
             'mobile',
-            'email'
+            'email',
+            'fdp_client'
         ];
     }
 
@@ -62,16 +64,22 @@ class UnifiedTemplateExport implements FromArray, WithHeadings, WithEvents
                 $validationSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($workbook, 'ValidationLists');
                 $workbook->addSheet($validationSheet);
 
-                // 2. Populate College Types into Column A of the validation sheet
+                // 2. Populate College Types into Column A, FDP options into Column B
                 $types = ['Affiliated', 'Autonomous', 'Constituent', 'Deemed', 'Other'];
                 foreach ($types as $index => $type) {
                     $validationSheet->setCellValue('A' . ($index + 1), $type);
+                }
+
+                $fdpOptions = ['Yes', 'No'];
+                foreach ($fdpOptions as $index => $opt) {
+                    $validationSheet->setCellValue('B' . ($index + 1), $opt);
                 }
 
                 // Hide the validation lists sheet
                 $validationSheet->setSheetState(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::SHEETSTATE_HIDDEN);
 
                 $typeValidationRange = 'ValidationLists!$A$1:$A$' . count($types);
+                $fdpValidationRange = 'ValidationLists!$B$1:$B$' . count($fdpOptions);
 
                 for ($row = 2; $row <= 150; $row++) {
                     // Type validation dropdown (Column C)
@@ -87,6 +95,20 @@ class UnifiedTemplateExport implements FromArray, WithHeadings, WithEvents
                     $typeValidation->setPromptTitle('Select College Type');
                     $typeValidation->setPrompt('Affiliated, Autonomous, Constituent, Deemed, Other');
                     $typeValidation->setFormula1($typeValidationRange);
+
+                    // FDP Client validation dropdown (Column J)
+                    $fdpValidation = $sheet->getCell('J' . $row)->getDataValidation();
+                    $fdpValidation->setType(DataValidation::TYPE_LIST);
+                    $fdpValidation->setErrorStyle(DataValidation::STYLE_STOP);
+                    $fdpValidation->setAllowBlank(true);
+                    $fdpValidation->setShowInputMessage(true);
+                    $fdpValidation->setShowErrorMessage(true);
+                    $fdpValidation->setShowDropDown(true);
+                    $fdpValidation->setErrorTitle('Invalid Selection');
+                    $fdpValidation->setError('Please select Yes or No.');
+                    $fdpValidation->setPromptTitle('Is FDP Client?');
+                    $fdpValidation->setPrompt('Yes, No');
+                    $fdpValidation->setFormula1($fdpValidationRange);
                 }
             }
         ];

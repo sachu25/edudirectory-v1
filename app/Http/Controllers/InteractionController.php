@@ -22,6 +22,10 @@ class InteractionController extends Controller
                 $data->where('interactions.college_id', $request->college_id);
             }
             
+            if ($request->filled('user_id')) {
+                $data->where('interactions.user_id', $request->user_id);
+            }
+            
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('college', function($row){

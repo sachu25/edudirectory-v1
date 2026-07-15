@@ -79,6 +79,7 @@ class CollegeController extends Controller
             'official_email' => 'nullable|email|max:255',
             'established_year' => 'nullable|integer',
             'status' => 'nullable|string|in:active,inactive',
+            'fdp_client' => 'nullable|string|in:Yes,No',
         ]);
 
         $data = $request->except(['_token', 'college_id']);

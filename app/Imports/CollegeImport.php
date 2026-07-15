@@ -166,6 +166,8 @@ class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
             $universityId = $uni->id;
         }
 
+        $fdpClient = isset($row['fdp_client']) ? (in_array(strtolower(trim($row['fdp_client'])), ['yes', 'y', '1', 'true']) ? 'Yes' : 'No') : 'No';
+
         $existingCollege = $this->findExistingDuplicate($normInput);
 
         if ($existingCollege) {
@@ -174,6 +176,7 @@ class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
                 'university_id' => $universityId ?: $existingCollege->university_id,
                 'is_university' => $existingCollege->is_university || $isUniversity,
                 'state' => $existingCollege->state ?: $state,
+                'fdp_client' => $existingCollege->fdp_client === 'Yes' ? 'Yes' : $fdpClient,
             ]);
             $this->updatedCount++;
             return null;
@@ -186,6 +189,7 @@ class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
             'university_id'         => $universityId,
             'state'                 => $state,
             'status'                => 'active',
+            'fdp_client'            => $fdpClient,
         ]);
 
         if ($this->collegesCache !== null) {
@@ -223,6 +227,7 @@ class CollegeImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
             'state' => 'required|string',
             'type' => 'nullable|string',
             'affiliated_university' => 'nullable|string',
+            'fdp_client' => 'nullable|string',
         ];
     }
 }

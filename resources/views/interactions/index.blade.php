@@ -30,7 +30,16 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-3 col-lg-2">
+                <div class="col-md-5 col-lg-4">
+                    <label for="filter_user_id" class="form-label fw-semibold text-secondary" style="font-size: 0.85rem; text-uppercase; letter-spacing: 0.5px;">Filter by Contacted By</label>
+                    <select class="form-select" id="filter_user_id">
+                        <option value="">All Staff</option>
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2 col-lg-2">
                     <button class="btn btn-outline-secondary w-100 py-2" id="resetFilterBtn">
                         <i class="fas fa-undo me-1"></i> Reset
                     </button>
@@ -191,6 +200,7 @@
                     url: "{{ route('interactions.index') }}",
                     data: function(d) {
                         d.college_id = $('#filter_college_id').val();
+                        d.user_id = $('#filter_user_id').val();
                     }
                 },
                 order: [[0, 'desc']], // Order by date descending
@@ -221,8 +231,17 @@
                 table.draw();
             });
 
+            $('#filter_user_id').select2({
+                theme: 'bootstrap-5',
+                placeholder: 'Filter by Contacted By',
+                allowClear: true
+            }).on('change', function() {
+                table.draw();
+            });
+
             $('#resetFilterBtn').click(function() {
                 $('#filter_college_id').val('').trigger('change');
+                $('#filter_user_id').val('').trigger('change');
             });
 
             // Fetch contact persons based on college selection

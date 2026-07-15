@@ -182,6 +182,8 @@ class UnifiedImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
             $universityId = $uni->id;
         }
 
+        $fdpClient = isset($row['fdp_client']) ? (in_array(strtolower(trim($row['fdp_client'])), ['yes', 'y', '1', 'true']) ? 'Yes' : 'No') : 'No';
+
         $college = $this->findExistingDuplicate($normInput);
 
         if ($college) {
@@ -190,6 +192,7 @@ class UnifiedImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
                 'university_id' => $universityId ?: $college->university_id,
                 'is_university' => $college->is_university || $isUniversity,
                 'state' => $college->state ?: $state,
+                'fdp_client' => $college->fdp_client === 'Yes' ? 'Yes' : $fdpClient,
             ]);
         } else {
             $college = College::create([
@@ -199,6 +202,7 @@ class UnifiedImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
                 'university_id'         => $universityId,
                 'state'                 => $state,
                 'status'                => 'active',
+                'fdp_client'            => $fdpClient,
             ]);
 
             if ($this->collegesCache !== null) {
@@ -308,6 +312,7 @@ class UnifiedImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmp
             'state' => 'required|string',
             'type' => 'nullable|string',
             'affiliated_university' => 'nullable|string',
+            'fdp_client' => 'nullable|string',
             'contact_name' => 'required|string',
             'designation' => 'required|string',
             'department' => 'nullable|string',
