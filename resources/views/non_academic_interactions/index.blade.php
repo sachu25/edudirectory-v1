@@ -13,7 +13,7 @@
         <div class="card-body">
             <!-- Filter Options -->
             <div class="row mb-4 align-items-end g-3">
-                <div class="col-md-3">
+                <div class="col-xl-3 col-lg-4 col-md-6 col-12">
                     <label for="filter_client" class="form-label fw-semibold text-muted small text-uppercase">Filter by Client</label>
                     <select class="form-select select2-filter" id="filter_client">
                         <option value="">All Clients</option>
@@ -22,7 +22,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-xl-3 col-lg-4 col-md-6 col-12">
                     <label for="filter_employee" class="form-label fw-semibold text-muted small text-uppercase">Filter by Employee</label>
                     <select class="form-select select2-filter" id="filter_employee">
                         <option value="">All Employees</option>
@@ -31,7 +31,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-xl-2 col-lg-4 col-md-6 col-12">
                     <label for="filter_purpose" class="form-label fw-semibold text-muted small text-uppercase">Filter by Purpose</label>
                     <select class="form-select" id="filter_purpose">
                         <option value="">All Purposes</option>
@@ -44,7 +44,7 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-xl-2 col-lg-4 col-md-6 col-12">
                     <label for="filter_status" class="form-label fw-semibold text-muted small text-uppercase">Filter by Status</label>
                     <select class="form-select" id="filter_status">
                         <option value="">All Statuses</option>
@@ -56,7 +56,7 @@
                         <option value="Closed">Closed</option>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-xl-2 col-lg-4 col-md-6 col-12">
                     <button class="btn btn-outline-secondary w-100 py-2" id="resetFilterBtn">
                         <i class="fas fa-undo me-1"></i> Reset
                     </button>
@@ -72,6 +72,7 @@
                             <th>Client Name</th>
                             <th>Employee Name</th>
                             <th>Contact Date</th>
+                            <th>Next Follow-up Date</th>
                             <th>Contact Mode</th>
                             <th>Purpose</th>
                             <th>Status</th>
@@ -224,6 +225,7 @@
                     {data: 'client_name', name: 'client.name'},
                     {data: 'employee_name', name: 'employee.name'},
                     {data: 'formatted_date', name: 'contact_date'},
+                    {data: 'formatted_next_followup_date', name: 'next_followup_date'},
                     {data: 'contact_mode', name: 'contact_mode'},
                     {data: 'purpose', name: 'purpose'},
                     {data: 'interaction_status', name: 'interaction_status'},

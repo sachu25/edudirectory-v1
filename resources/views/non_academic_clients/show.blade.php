@@ -78,6 +78,9 @@
                                 <div class="mb-2">
                                     <span class="badge bg-light text-dark border me-1">{{ $interaction->contact_mode }}</span>
                                     <span class="badge bg-secondary me-1">{{ $interaction->interaction_status }}</span>
+                                    @if($interaction->next_followup_date)
+                                        <span class="badge bg-warning text-dark me-1"><i class="fas fa-calendar-check me-1"></i>Next Follow-up: {{ \Carbon\Carbon::parse($interaction->next_followup_date)->format('d M Y') }}</span>
+                                    @endif
                                     <span class="text-muted small">by {{ $interaction->employee ? $interaction->employee->name : 'N/A' }}</span>
                                 </div>
                                 @if($interaction->client_response)

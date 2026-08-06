@@ -21,7 +21,7 @@
         <div class="card-body">
             <!-- Filter Row -->
             <div class="row mb-4 align-items-end g-3">
-                <div class="col-md-5 col-lg-4">
+                <div class="col-xl-5 col-lg-5 col-md-6 col-12">
                     <label for="filter_college_id" class="form-label fw-semibold text-secondary" style="font-size: 0.85rem; text-uppercase; letter-spacing: 0.5px;">Filter by Institution</label>
                     <select class="form-select" id="filter_college_id">
                         <option value="">All Institutions</option>
@@ -30,7 +30,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-5 col-lg-4">
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12">
                     <label for="filter_user_id" class="form-label fw-semibold text-secondary" style="font-size: 0.85rem; text-uppercase; letter-spacing: 0.5px;">Filter by Contacted By</label>
                     <select class="form-select" id="filter_user_id">
                         <option value="">All Staff</option>
@@ -39,7 +39,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-2 col-lg-2">
+                <div class="col-xl-3 col-lg-3 col-md-6 col-12">
                     <button class="btn btn-outline-secondary w-100 py-2" id="resetFilterBtn">
                         <i class="fas fa-undo me-1"></i> Reset
                     </button>

@@ -12,6 +12,10 @@ class NonAcademicInteractionController extends Controller
 {
     public function index(Request $request)
     {
+        if (!auth()->user()->hasPermission('non_academic_interactions.view')) {
+            abort(403, 'Unauthorized access to Corporate Interactions.');
+        }
+
         if ($request->ajax()) {
             $data = NonAcademicInteraction::with(['client', 'employee'])->select('non_academic_interactions.*');
 
@@ -39,10 +43,17 @@ class NonAcademicInteractionController extends Controller
                 ->addColumn('formatted_date', function ($row) {
                     return $row->contact_date ? $row->contact_date->format('Y-m-d H:i') : 'N/A';
                 })
+                ->addColumn('formatted_next_followup_date', function ($row) {
+                    return $row->next_followup_date ? $row->next_followup_date->format('Y-m-d') : 'N/A';
+                })
                 ->addColumn('action', function ($row) {
                     $btn = '';
-                    $btn .= '<button data-id="' . $row->id . '" class="editBtn btn btn-sm btn-outline-primary me-1"><i class="fas fa-edit"></i></button>';
-                    $btn .= '<button data-id="' . $row->id . '" class="deleteBtn btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>';
+                    if (auth()->user()->hasPermission('non_academic_interactions.edit')) {
+                        $btn .= '<button data-id="' . $row->id . '" class="editBtn btn btn-sm btn-outline-primary me-1"><i class="fas fa-edit"></i></button>';
+                    }
+                    if (auth()->user()->hasPermission('non_academic_interactions.delete')) {
+                        $btn .= '<button data-id="' . $row->id . '" class="deleteBtn btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>';
+                    }
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -57,6 +68,16 @@ class NonAcademicInteractionController extends Controller
 
     public function store(Request $request)
     {
+        if ($request->filled('interaction_id')) {
+            if (!auth()->user()->hasPermission('non_academic_interactions.edit')) {
+                abort(403, 'Unauthorized to edit interaction.');
+            }
+        } else {
+            if (!auth()->user()->hasPermission('non_academic_interactions.create')) {
+                abort(403, 'Unauthorized to log interaction.');
+            }
+        }
+
         $request->validate([
             'non_academic_client_id' => 'required|exists:non_academic_clients,id',
             'user_id' => 'required|exists:users,id',
@@ -81,12 +102,18 @@ class NonAcademicInteractionController extends Controller
 
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('non_academic_interactions.edit')) {
+            abort(403, 'Unauthorized to edit interaction.');
+        }
         $interaction = NonAcademicInteraction::findOrFail($id);
         return response()->json($interaction);
     }
 
     public function destroy($id)
     {
+        if (!auth()->user()->hasPermission('non_academic_interactions.delete')) {
+            abort(403, 'Unauthorized to delete interaction.');
+        }
         NonAcademicInteraction::findOrFail($id)->delete();
         return response()->json(['success' => 'Interaction deleted successfully.']);
     }

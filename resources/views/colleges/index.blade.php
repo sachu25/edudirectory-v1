@@ -53,7 +53,7 @@
         <div class="card-body">
             <!-- Filter Options -->
             <div class="row mb-4 align-items-end g-3">
-                <div class="col-md-2">
+                <div class="col-xl-2 col-lg-4 col-md-6 col-12">
                     <label for="filter_type" class="form-label fw-semibold text-muted small text-uppercase">Filter by Type</label>
                     <select class="form-select select2-filter" id="filter_type">
                         <option value="">All Types</option>
@@ -64,7 +64,7 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-xl-2 col-lg-4 col-md-6 col-12">
                     <label for="filter_is_university" class="form-label fw-semibold text-muted small text-uppercase">Filter by Category</label>
                     <select class="form-select select2-filter" id="filter_is_university">
                         <option value="">All Categories</option>
@@ -72,7 +72,7 @@
                         <option value="no">Colleges Only</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-xl-3 col-lg-4 col-md-6 col-12">
                     <label for="filter_university_id" class="form-label fw-semibold text-muted small text-uppercase">Filter by Affiliated University</label>
                     <select class="form-select select2-filter" id="filter_university_id">
                         <option value="">All Universities</option>
@@ -81,7 +81,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-xl-3 col-lg-4 col-md-6 col-12">
                     <label for="filter_state" class="form-label fw-semibold text-muted small text-uppercase">Filter by State</label>
                     <select class="form-select select2-filter" id="filter_state">
                         <option value="">All States</option>
@@ -90,7 +90,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-xl-2 col-lg-4 col-md-6 col-12">
                     <button class="btn btn-outline-secondary w-100 py-2" id="resetFilterBtn">
                         <i class="fas fa-undo me-1"></i> Reset
                     </button>

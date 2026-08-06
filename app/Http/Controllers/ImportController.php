@@ -13,11 +13,18 @@ class ImportController extends Controller
 {
     public function index()
     {
+        if (!auth()->user()->hasPermission('imports.view')) {
+            abort(403, 'Unauthorized access to Data Imports.');
+        }
         return view('imports.index');
     }
 
     public function store(Request $request)
     {
+        if (!auth()->user()->hasPermission('imports.execute')) {
+            abort(403, 'Unauthorized to perform data imports.');
+        }
+
         $request->validate([
             'import_file' => 'required|mimes:xlsx,csv,xls|max:5120',
         ]);
@@ -41,6 +48,10 @@ class ImportController extends Controller
 
     public function storeUnified(Request $request)
     {
+        if (!auth()->user()->hasPermission('imports.execute')) {
+            abort(403, 'Unauthorized to perform data imports.');
+        }
+
         $request->validate([
             'import_file' => 'required|mimes:xlsx,csv,xls|max:5120',
         ]);
@@ -58,14 +69,10 @@ class ImportController extends Controller
                 $message .= " " . count($skipped) . " rows were skipped.";
             }
 
-            $response = redirect()->route('imports.index')->with('success', $message);
-            if (count($skipped) > 0) {
-                $response->with('skipped_contacts', $skipped);
-            }
             if ($failures->isNotEmpty()) {
-                $response->with('import_failures', $failures);
+                return redirect()->route('imports.index')->with('success', $message)->with('import_failures', $failures);
             }
-            return $response;
+            return redirect()->route('imports.index')->with('success', $message);
         } catch (\Exception $e) {
             return redirect()->route('imports.index')->with('error', 'Error importing file: ' . $e->getMessage());
         }
@@ -73,6 +80,9 @@ class ImportController extends Controller
 
     public function downloadUnifiedTemplate()
     {
-        return Excel::download(new UnifiedTemplateExport, 'unified_import_template.xlsx');
+        if (!auth()->user()->hasPermission('imports.view')) {
+            abort(403, 'Unauthorized to download import template.');
+        }
+        return Excel::download(new UnifiedTemplateExport, 'unified_contacts_import_template.xlsx');
     }
 }

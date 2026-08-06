@@ -12,10 +12,18 @@ class NonAcademicInteractionTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(\Database\Seeders\RoleAndPermissionSeeder::class);
+    }
+
     public function test_can_access_non_academic_interactions_index()
     {
+        $adminRole = \App\Models\Role::where('name', 'admin')->first();
         $user = User::factory()->create([
-            'status' => 'active'
+            'status' => 'active',
+            'role_id' => $adminRole->id
         ]);
         
         $response = $this->actingAs($user)
@@ -26,8 +34,10 @@ class NonAcademicInteractionTest extends TestCase
 
     public function test_can_log_non_academic_interaction()
     {
+        $adminRole = \App\Models\Role::where('name', 'admin')->first();
         $user = User::factory()->create([
-            'status' => 'active'
+            'status' => 'active',
+            'role_id' => $adminRole->id
         ]);
         
         $client = NonAcademicClient::create([

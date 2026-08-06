@@ -167,7 +167,7 @@
             }
 
             /* Responsive Sidebar Styling */
-            @media (max-width: 767.98px) {
+            @media (max-width: 991.98px) {
                 .sidebar {
                     left: calc(-1 * var(--sidebar-width));
                     position: fixed !important;
@@ -201,49 +201,70 @@
                                 <i class="fas fa-home"></i> Dashboard
                             </a>
                         </li>
+                        @if(auth()->user() && auth()->user()->hasPermission('colleges.view'))
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('colleges.*') ? 'active' : '' }}" href="{{ route('colleges.index') }}">
                                 <i class="fas fa-graduation-cap"></i> Institutions
                             </a>
                         </li>
+                        @endif
+                        @if(auth()->user() && auth()->user()->hasPermission('contacts.view'))
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('contacts.*') ? 'active' : '' }}" href="{{ route('contacts.index') }}">
                                 <i class="fas fa-address-book"></i> Contacts
                             </a>
                         </li>
+                        @endif
+                        @if(auth()->user() && auth()->user()->hasPermission('interactions.view'))
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('interactions.*') ? 'active' : '' }}" href="{{ route('interactions.index') }}">
                                 <i class="fas fa-handshake"></i> Interactions
                             </a>
                         </li>
+                        @endif
+                        @if(auth()->user() && auth()->user()->hasPermission('non_academic_clients.view'))
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('non-academic-clients.*') ? 'active' : '' }}" href="{{ route('non-academic-clients.index') }}">
                                 <i class="fas fa-building"></i> Non-Academic Clients
                             </a>
                         </li>
+                        @endif
+                        @if(auth()->user() && auth()->user()->hasPermission('non_academic_interactions.view'))
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('non-academic-interactions.*') ? 'active' : '' }}" href="{{ route('non-academic-interactions.index') }}">
                                 <i class="fas fa-handshake"></i> Non-Academic Interactions
                             </a>
                         </li>
+                        @endif
+                        @if(auth()->user() && auth()->user()->hasPermission('reports.view'))
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}" href="{{ route('reports.index') }}">
                                 <i class="fas fa-chart-bar"></i> Reports
                             </a>
                         </li>
+                        @endif
+                        @if(auth()->user() && auth()->user()->hasPermission('imports.view'))
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('imports.*') || request()->routeIs('imports') ? 'active' : '' }}" href="{{ route('imports.index') }}">
                                 <i class="fas fa-file-import"></i> Imports
                             </a>
                         </li>
+                        @endif
+
+                        @if(auth()->user() && (auth()->user()->hasPermission('universities.view') || auth()->user()->hasPermission('designations.manage') || auth()->user()->isAdmin()))
                         <li class="nav-item mt-3 mb-1 px-3 text-uppercase" style="font-size: 0.75rem; font-weight: bold; letter-spacing: 0.05em; color: rgba(255, 255, 255, 0.45) !important;">
                             Settings & Masters
                         </li>
+                        @endif
+
+                        @if(auth()->user() && auth()->user()->hasPermission('universities.view'))
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('universities.*') ? 'active' : '' }}" href="{{ route('universities.index') }}">
                                 <i class="fas fa-university"></i> Universities
                             </a>
                         </li>
+                        @endif
+                        @if(auth()->user() && (auth()->user()->hasPermission('designations.manage') || auth()->user()->isAdmin()))
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('designations.*') ? 'active' : '' }}" href="{{ route('designations.index') }}">
                                 <i class="fas fa-id-badge"></i> Designations
@@ -264,12 +285,16 @@
                                 <i class="fas fa-comments"></i> Contact Modes
                             </a>
                         </li>
-                        @if(auth()->user() && auth()->user()->isAdmin())
+                        @endif
+
+                        @if(auth()->user() && (auth()->user()->hasPermission('users.view') || auth()->user()->isAdmin()))
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}">
                                 <i class="fas fa-users"></i> Users
                             </a>
                         </li>
+                        @endif
+                        @if(auth()->user() && (auth()->user()->hasPermission('roles.view') || auth()->user()->isAdmin()))
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}" href="{{ route('roles.index') }}">
                                 <i class="fas fa-user-shield"></i> Roles & Permissions
@@ -285,7 +310,7 @@
                 <!-- Top Navbar -->
                 <nav class="navbar navbar-expand-lg top-navbar px-4 py-3">
                     <div class="container-fluid">
-                        <button class="btn btn-outline-secondary d-md-none me-3" type="button" id="sidebarToggle">
+                        <button class="btn btn-outline-secondary d-lg-none me-3" type="button" id="sidebarToggle">
                             <i class="fas fa-bars"></i>
                         </button>
                         

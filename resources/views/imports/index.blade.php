@@ -35,8 +35,8 @@
         <!-- Tab 1: Unified Import -->
         <div class="tab-pane fade show active" id="unified" role="tabpanel" aria-labelledby="unified-tab">
             <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="card h-100 border-0 shadow-sm">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
                         <div class="card-header bg-white py-3 border-0">
                             <h6 class="mb-0 fw-bold text-dark"><i class="fas fa-upload text-primary me-2"></i> Upload Unified Sheet</h6>
                         </div>
@@ -60,8 +60,8 @@
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="card h-100 bg-light border-0 shadow-sm">
+                <div class="col-12">
+                    <div class="card bg-light border-0 shadow-sm">
                         <div class="card-body p-4">
                             <h6 class="fw-bold mb-3 text-dark"><i class="fas fa-info-circle text-info me-2"></i> Unified File Format</h6>
                             <p class="small text-muted">The uploaded sheet must have a header row with these exact columns:</p>
@@ -100,8 +100,8 @@
          <!-- Tab 2: Institutions Only -->
         <div class="tab-pane fade" id="colleges" role="tabpanel" aria-labelledby="colleges-tab">
             <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="card h-100 border-0 shadow-sm">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
                         <div class="card-header bg-white py-3 border-0">
                             <h6 class="mb-0 fw-bold text-dark"><i class="fas fa-upload text-primary me-2"></i> Upload Institutions Sheet</h6>
                         </div>
@@ -125,8 +125,8 @@
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="card h-100 bg-light border-0 shadow-sm">
+                <div class="col-12">
+                    <div class="card bg-light border-0 shadow-sm">
                         <div class="card-body p-4">
                             <h6 class="fw-bold mb-3 text-dark"><i class="fas fa-info-circle text-primary me-2"></i> Institution Format Instructions</h6>
                             <p class="small text-muted">Please ensure your sheet contains a header row with the following column names:</p>
@@ -149,8 +149,8 @@
          <!-- Tab 3: Contacts Only -->
         <div class="tab-pane fade" id="contacts" role="tabpanel" aria-labelledby="contacts-tab">
             <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="card h-100 border-0 shadow-sm">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
                         <div class="card-header bg-white py-3 border-0">
                             <h6 class="mb-0 fw-bold text-dark"><i class="fas fa-upload text-primary me-2"></i> Upload Contacts Sheet</h6>
                         </div>
@@ -174,8 +174,8 @@
                     </div>
                 </div>
 
-                 <div class="col-md-6">
-                    <div class="card h-100 bg-light border-0 shadow-sm">
+                 <div class="col-12">
+                    <div class="card bg-light border-0 shadow-sm">
                         <div class="card-body p-4">
                             <h6 class="fw-bold mb-3 text-dark"><i class="fas fa-info-circle text-primary me-2"></i> Contact Format Instructions</h6>
                             <p class="small text-muted">Please ensure your sheet contains a header row with the following column names:</p>

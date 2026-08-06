@@ -11,6 +11,10 @@ class NonAcademicClientController extends Controller
 {
     public function index(Request $request)
     {
+        if (!auth()->user()->hasPermission('non_academic_clients.view')) {
+            abort(403, 'Unauthorized access to Corporate Clients.');
+        }
+
         if ($request->ajax()) {
             $data = NonAcademicClient::with('contactedEmployee')->select('non_academic_clients.*');
 
@@ -28,9 +32,13 @@ class NonAcademicClientController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '';
-                    $btn .= '<button data-id="' . $row->id . '" class="editBtn btn btn-sm btn-outline-primary me-1"><i class="fas fa-edit"></i></button>';
+                    if (auth()->user()->hasPermission('non_academic_clients.edit')) {
+                        $btn .= '<button data-id="' . $row->id . '" class="editBtn btn btn-sm btn-outline-primary me-1"><i class="fas fa-edit"></i></button>';
+                    }
                     $btn .= '<a href="' . route('non-academic-clients.show', $row->id) . '" class="btn btn-sm btn-outline-info me-1"><i class="fas fa-eye"></i></a>';
-                    $btn .= '<button data-id="' . $row->id . '" class="deleteBtn btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>';
+                    if (auth()->user()->hasPermission('non_academic_clients.delete')) {
+                        $btn .= '<button data-id="' . $row->id . '" class="deleteBtn btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>';
+                    }
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -46,6 +54,16 @@ class NonAcademicClientController extends Controller
 
     public function store(Request $request)
     {
+        if ($request->filled('client_id')) {
+            if (!auth()->user()->hasPermission('non_academic_clients.edit')) {
+                abort(403, 'Unauthorized to edit clients.');
+            }
+        } else {
+            if (!auth()->user()->hasPermission('non_academic_clients.create')) {
+                abort(403, 'Unauthorized to create clients.');
+            }
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'industry' => 'nullable|string|max:255',
@@ -72,18 +90,27 @@ class NonAcademicClientController extends Controller
 
     public function edit($id)
     {
+        if (!auth()->user()->hasPermission('non_academic_clients.edit')) {
+            abort(403, 'Unauthorized to edit clients.');
+        }
         $client = NonAcademicClient::findOrFail($id);
         return response()->json($client);
     }
 
     public function show($id)
     {
+        if (!auth()->user()->hasPermission('non_academic_clients.view')) {
+            abort(403, 'Unauthorized access to client profile.');
+        }
         $client = NonAcademicClient::with(['interactions.employee'])->findOrFail($id);
         return view('non_academic_clients.show', compact('client'));
     }
 
     public function destroy($id)
     {
+        if (!auth()->user()->hasPermission('non_academic_clients.delete')) {
+            abort(403, 'Unauthorized to delete clients.');
+        }
         NonAcademicClient::findOrFail($id)->delete();
         return response()->json(['success' => 'Client deleted successfully.']);
     }

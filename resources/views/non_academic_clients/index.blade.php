@@ -13,7 +13,7 @@
         <div class="card-body">
             <!-- Filter Options -->
             <div class="row mb-4 align-items-end g-3">
-                <div class="col-md-4">
+                <div class="col-xl-5 col-lg-5 col-md-6 col-12">
                     <label for="filter_industry" class="form-label fw-semibold text-muted small text-uppercase">Filter by Industry</label>
                     <select class="form-select select2-filter" id="filter_industry">
                         <option value="">All Industries</option>
@@ -22,7 +22,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-xl-4 col-lg-4 col-md-6 col-12">
                     <label for="filter_employee" class="form-label fw-semibold text-muted small text-uppercase">Filter by Contacted Employee</label>
                     <select class="form-select select2-filter" id="filter_employee">
                         <option value="">All Employees</option>
@@ -31,7 +31,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-4 col-lg-2">
+                <div class="col-xl-3 col-lg-3 col-md-6 col-12">
                     <button class="btn btn-outline-secondary w-100 py-2" id="resetFilterBtn">
                         <i class="fas fa-undo me-1"></i> Reset
                     </button>

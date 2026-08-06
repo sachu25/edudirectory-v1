@@ -45,6 +45,9 @@ Route::middleware(['auth', 'role'])->group(function () {
     Route::get('reports/export/excel', [ReportController::class, 'exportExcel'])->name('reports.export.excel');
     Route::get('reports/export/csv', [ReportController::class, 'exportCsv'])->name('reports.export.csv');
     Route::get('reports/export/pdf', [ReportController::class, 'exportPdf'])->name('reports.export.pdf');
+    Route::get('reports/export/staff-excel', [ReportController::class, 'exportStaffExcel'])->name('reports.export.staff-excel');
+    Route::get('reports/export/staff-csv', [ReportController::class, 'exportStaffCsv'])->name('reports.export.staff-csv');
+    Route::get('reports/export/staff-pdf', [ReportController::class, 'exportStaffPdf'])->name('reports.export.staff-pdf');
     Route::get('imports', [ImportController::class, 'index'])->name('imports.index');
     Route::post('imports', [ImportController::class, 'store'])->name('imports.store');
     Route::get('imports/download-unified-template', [ImportController::class, 'downloadUnifiedTemplate'])->name('imports.download-unified-template');
