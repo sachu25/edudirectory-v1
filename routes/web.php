@@ -54,6 +54,7 @@ Route::middleware(['auth', 'role'])->group(function () {
     Route::post('imports/unified', [ImportController::class, 'storeUnified'])->name('imports.unified');
     
     Route::middleware('role:admin')->group(function () {
+        Route::post('users/{id}/force-password-change', [UserController::class, 'forcePasswordChange'])->name('users.force-password-change');
         Route::resource('users', UserController::class);
         Route::resource('roles', \App\Http\Controllers\RoleController::class);
     });

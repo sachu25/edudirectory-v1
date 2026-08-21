@@ -24,15 +24,19 @@ class UserController extends Controller
                         return '<span class="badge bg-dark">No Role</span>';
                     })
                     ->addColumn('status_badge', function($row){
-                        if($row->status == 'active'){
-                            return '<span class="badge bg-success">Active</span>';
+                        $badge = $row->status == 'active' 
+                            ? '<span class="badge bg-success">Active</span>' 
+                            : '<span class="badge bg-danger">Inactive</span>';
+                        if ($row->force_password_change) {
+                            $badge .= ' <span class="badge bg-warning text-dark"><i class="fas fa-exclamation-triangle me-1"></i>Password Update Required</span>';
                         }
-                        return '<span class="badge bg-danger">Inactive</span>';
+                        return $badge;
                     })
                     ->addColumn('action', function($row){
-                           $btn = '<button data-id="'.$row->id.'" class="editBtn btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></button>';
+                           $btn = '<button data-id="'.$row->id.'" class="editBtn btn btn-sm btn-outline-primary" title="Edit User"><i class="fas fa-edit"></i></button>';
+                           $btn .= ' <button data-id="'.$row->id.'" class="forcePasswordBtn btn btn-sm btn-outline-warning" title="Require Forced Password Change"><i class="fas fa-key"></i></button>';
                            if(auth()->user()->id !== $row->id) { // Prevent deleting self
-                               $btn .= ' <button data-id="'.$row->id.'" class="deleteBtn btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>';
+                               $btn .= ' <button data-id="'.$row->id.'" class="deleteBtn btn btn-sm btn-outline-danger" title="Delete User"><i class="fas fa-trash"></i></button>';
                            }
                            return $btn;
                     })
@@ -67,10 +71,11 @@ class UserController extends Controller
             'email' => $request->email,
             'role_id' => $request->role_id,
             'status' => $request->status,
+            'force_password_change' => $request->has('force_password_change') ? true : false,
         ];
 
         if($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
+            $data['password'] = $request->password;
         }
 
         User::updateOrCreate(['id' => $request->user_id], $data);
@@ -82,6 +87,13 @@ class UserController extends Controller
     {
         $user = User::with('role')->find($id);
         return response()->json($user);
+    }
+
+    public function forcePasswordChange($id)
+    {
+        $user = User::findOrFail($id);
+        $user->update(['force_password_change' => true]);
+        return response()->json(['success' => 'Forced password change flagged for ' . $user->name . '.']);
     }
 
     public function destroy($id)

@@ -76,6 +76,13 @@
                             </select>
                         </div>
         
+                        <div class="mb-3 form-check bg-light p-3 rounded border">
+                            <input type="checkbox" class="form-check-input ms-0 me-2" id="force_password_change" name="force_password_change" value="1">
+                            <label class="form-check-label fw-semibold text-dark" for="force_password_change">
+                                <i class="fas fa-key text-warning me-1"></i>Require Forced Password Change on Next Login
+                            </label>
+                        </div>
+        
                         <div class="d-grid mt-4">
                             <button type="submit" class="btn btn-primary" id="saveBtn" value="create">Save Changes</button>
                         </div>
@@ -121,6 +128,7 @@
                 $('#userForm').trigger("reset");
                 $('#modelHeading').html("Create New User");
                 $('#password').attr('required', true); // Password required for new users
+                $('#force_password_change').prop('checked', false);
                 $('#ajaxModel').modal('show');
             });
             
@@ -137,7 +145,47 @@
                     $('#email').val(data.email);
                     $('#role_id').val(data.role_id);
                     $('#status').val(data.status);
+                    $('#force_password_change').prop('checked', data.force_password_change ? true : false);
                 })
+            });
+
+            $('body').on('click', '.forcePasswordBtn', function () {
+                var user_id = $(this).data("id");
+                
+                Swal.fire({
+                    title: 'Require Password Change?',
+                    text: "This user will be forced to set a new strong password on their next click or login.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#f59e0b',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Yes, Flag User!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ url('users') }}/" + user_id + "/force-password-change",
+                            success: function (data) {
+                                table.draw();
+                                Swal.fire({
+                                    toast: true,
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: data.success,
+                                    showConfirmButton: false,
+                                    timer: 3000
+                                });
+                            },
+                            error: function (data) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Failed to flag user for password change.',
+                                });
+                            }
+                        });
+                    }
+                });
             });
             
             $('#saveBtn').click(function (e) {

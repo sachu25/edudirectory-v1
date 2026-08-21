@@ -25,6 +25,16 @@
             <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
         </div>
 
+        <div class="p-3 bg-light rounded-3 border text-start" style="font-size: 0.82rem; color: #475569;">
+            <div class="fw-semibold mb-1 text-dark"><i class="fas fa-info-circle text-primary me-1"></i> Password Security Requirements:</div>
+            <ul class="mb-0 ps-3">
+                <li>At least <strong>12 characters</strong> in length</li>
+                <li>Must include <strong>uppercase</strong> &amp; <strong>lowercase</strong> letters</li>
+                <li>Must include at least <strong>1 number</strong> and <strong>1 special symbol</strong></li>
+                <li>Must not be a leaked or compromised password</li>
+            </ul>
+        </div>
+
         <div>
             <x-input-label for="update_password_password_confirmation" :value="__('Confirm Password')" />
             <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
