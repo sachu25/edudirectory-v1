@@ -18,18 +18,24 @@
         @csrf
 
         <!-- Current Password -->
-        <div class="form-floating mb-3">
-            <input type="password" class="form-control @error('current_password') is-invalid @enderror" id="current_password" name="current_password" placeholder="Current Password" required autocomplete="current-password" style="border-radius: 10px; border: 1px solid #E2E8F0;">
+        <div class="form-floating mb-3 position-relative">
+            <input type="password" class="form-control @error('current_password') is-invalid @enderror" id="current_password" name="current_password" placeholder="Current Password" required autocomplete="current-password" style="border-radius: 10px; border: 1px solid #E2E8F0; padding-right: 48px;">
             <label for="current_password" style="color: #64748B;">Current Password</label>
+            <button type="button" class="btn border-0 text-secondary position-absolute end-0 top-50 translate-middle-y me-2 toggle-password-btn" data-target="current_password" style="z-index: 10; background: transparent;" title="Toggle Password Visibility">
+                <i class="fas fa-eye"></i>
+            </button>
             @error('current_password')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
 
         <!-- New Password -->
-        <div class="form-floating mb-3">
-            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="New Password" required autocomplete="new-password" style="border-radius: 10px; border: 1px solid #E2E8F0;">
+        <div class="form-floating mb-3 position-relative">
+            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="New Password" required autocomplete="new-password" style="border-radius: 10px; border: 1px solid #E2E8F0; padding-right: 48px;">
             <label for="password" style="color: #64748B;">New Password</label>
+            <button type="button" class="btn border-0 text-secondary position-absolute end-0 top-50 translate-middle-y me-2 toggle-password-btn" data-target="password" style="z-index: 10; background: transparent;" title="Toggle Password Visibility">
+                <i class="fas fa-eye"></i>
+            </button>
             @error('password')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -47,9 +53,12 @@
         </div>
 
         <!-- Confirm Password -->
-        <div class="form-floating mb-4">
-            <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror" id="password_confirmation" name="password_confirmation" placeholder="Confirm New Password" required autocomplete="new-password" style="border-radius: 10px; border: 1px solid #E2E8F0;">
+        <div class="form-floating mb-4 position-relative">
+            <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror" id="password_confirmation" name="password_confirmation" placeholder="Confirm New Password" required autocomplete="new-password" style="border-radius: 10px; border: 1px solid #E2E8F0; padding-right: 48px;">
             <label for="password_confirmation" style="color: #64748B;">Confirm New Password</label>
+            <button type="button" class="btn border-0 text-secondary position-absolute end-0 top-50 translate-middle-y me-2 toggle-password-btn" data-target="password_confirmation" style="z-index: 10; background: transparent;" title="Toggle Password Visibility">
+                <i class="fas fa-eye"></i>
+            </button>
             @error('password_confirmation')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror

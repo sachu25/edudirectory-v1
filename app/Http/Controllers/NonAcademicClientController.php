@@ -52,6 +52,11 @@ class NonAcademicClientController extends Controller
         return view('non_academic_clients.index', compact('employees', 'industries'));
     }
 
+    public function create()
+    {
+        return redirect()->route('non-academic-clients.index', ['action' => 'create']);
+    }
+
     public function store(Request $request)
     {
         if ($request->filled('client_id')) {

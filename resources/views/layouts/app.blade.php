@@ -394,6 +394,20 @@
                         $('#sidebarBackdrop').remove();
                     }
                 });
+
+                // Global Password Visibility Toggle
+                $(document).on('click', '.toggle-password-btn', function (e) {
+                    e.preventDefault();
+                    const btn = $(this);
+                    const targetId = btn.attr('data-target');
+                    const input = targetId ? $('#' + targetId) : btn.closest('.password-field-container, .form-floating, div').find('input[type="password"], input[type="text"]');
+                    
+                    if (input.length) {
+                        const isPassword = input.attr('type') === 'password';
+                        input.attr('type', isPassword ? 'text' : 'password');
+                        btn.find('i').toggleClass('fa-eye fa-eye-slash');
+                    }
+                });
             });
         </script>
         

@@ -66,6 +66,11 @@ class NonAcademicInteractionController extends Controller
         return view('non_academic_interactions.index', compact('clients', 'employees'));
     }
 
+    public function create()
+    {
+        return redirect()->route('non-academic-interactions.index', ['action' => 'create']);
+    }
+
     public function store(Request $request)
     {
         if ($request->filled('interaction_id')) {

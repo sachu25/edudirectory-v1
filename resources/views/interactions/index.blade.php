@@ -182,6 +182,14 @@
                 }
             });
 
+            // Auto-trigger create modal if action=create is passed in query string
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('action') === 'create') {
+                setTimeout(function() {
+                    $('#createNewInteraction').click();
+                }, 200);
+            }
+
             // Initialize Select2
             $('.select2-single').select2({
                 theme: 'bootstrap-5',

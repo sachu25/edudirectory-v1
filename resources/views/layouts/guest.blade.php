@@ -270,6 +270,24 @@
 
                 resizeCanvas();
                 animate();
+
+                // Global Password Visibility Toggle
+                document.addEventListener('click', function (e) {
+                    const btn = e.target.closest('.toggle-password-btn');
+                    if (!btn) return;
+                    e.preventDefault();
+                    const targetId = btn.getAttribute('data-target');
+                    const container = btn.closest('.form-floating, .password-field-container, div');
+                    const input = targetId ? document.getElementById(targetId) : container.querySelector('input[type="password"], input[type="text"]');
+                    if (input) {
+                        const isPassword = input.type === 'password';
+                        input.type = isPassword ? 'text' : 'password';
+                        const icon = btn.querySelector('i');
+                        if (icon) {
+                            icon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+                        }
+                    }
+                });
             });
         </script>
     </body>

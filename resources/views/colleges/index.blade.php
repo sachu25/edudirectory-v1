@@ -346,6 +346,14 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+            // Auto-trigger create modal if action=create is passed in query string
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('action') === 'create') {
+                setTimeout(function() {
+                    $('#createNewCollege').click();
+                }, 200);
+            }
             
             var table = $('.data-table').DataTable({
                 processing: true,

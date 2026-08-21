@@ -54,7 +54,12 @@
                         
                         <div class="mb-3">
                             <label for="password" class="form-label fw-semibold">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
+                            <div class="position-relative">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" style="padding-right: 45px;">
+                                <button type="button" class="btn border-0 text-secondary position-absolute end-0 top-50 translate-middle-y me-1 toggle-password-btn" data-target="password" style="z-index: 10; background: transparent;" title="Toggle Password Visibility">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
                             <div class="form-text text-muted small">Leave blank to keep current password when editing.</div>
                         </div>
 

@@ -35,6 +35,11 @@ class UniversityController extends Controller
         return view('universities.index');
     }
 
+    public function create()
+    {
+        return redirect()->route('universities.index', ['action' => 'create']);
+    }
+
     public function store(Request $request)
     {
         $request->validate([

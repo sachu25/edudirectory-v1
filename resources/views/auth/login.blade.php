@@ -15,9 +15,12 @@
         </div>
 
         <!-- Password -->
-        <div class="form-floating mb-3">
-            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Password" required autocomplete="current-password" style="border-radius: 10px; border: 1px solid #E2E8F0;">
+        <div class="form-floating mb-3 position-relative">
+            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Password" required autocomplete="current-password" style="border-radius: 10px; border: 1px solid #E2E8F0; padding-right: 48px;">
             <label for="password" style="color: #64748B;">Password</label>
+            <button type="button" class="btn border-0 text-secondary position-absolute end-0 top-50 translate-middle-y me-2 toggle-password-btn" data-target="password" style="z-index: 10; background: transparent;" title="Toggle Password Visibility">
+                <i class="fas fa-eye"></i>
+            </button>
             @error('password')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror

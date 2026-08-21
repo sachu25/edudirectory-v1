@@ -69,6 +69,11 @@ class ContactPersonController extends Controller
         return view('contacts.index', compact('colleges', 'designations'));
     }
 
+    public function create()
+    {
+        return redirect()->route('contacts.index', ['action' => 'create']);
+    }
+
     public function store(Request $request)
     {
         $permission = $request->contact_id ? 'contacts.edit' : 'contacts.create';

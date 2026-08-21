@@ -76,6 +76,11 @@ class InteractionController extends Controller
         return view('interactions.index', compact('colleges', 'statuses', 'purposes', 'contactModes', 'users'));
     }
 
+    public function create()
+    {
+        return redirect()->route('interactions.index', ['action' => 'create']);
+    }
+
     // Endpoint to get contact persons for a college via AJAX
     public function getContactPersons($college_id)
     {

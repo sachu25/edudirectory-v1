@@ -56,6 +56,11 @@ class CollegeController extends Controller
         return view('colleges.index', compact('universities', 'states'));
     }
 
+    public function create()
+    {
+        return redirect()->route('colleges.index', ['action' => 'create']);
+    }
+
     public function store(Request $request)
     {
         $permission = $request->college_id ? 'colleges.edit' : 'colleges.create';
